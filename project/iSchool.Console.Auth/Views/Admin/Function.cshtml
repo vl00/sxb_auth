@@ -1,0 +1,167 @@
+﻿@model iSchool.Authorization.Models.Function
+@{
+    ViewData["Title"] = "权限配置";
+    List<iSchool.Authorization.Models.Query> queryList = ViewData["QueryList"] as List<iSchool.Authorization.Models.Query>;
+    List<iSchool.Authorization.Models.Platform> platformList = ViewData["PlatformList"] as List<iSchool.Authorization.Models.Platform>;
+}
+<div class="card">
+    <form id="formFunction">
+        <div class="card-body p-5 col-6">
+            <div class="form-group">
+                <label class=" form-control-label">权限名称</label>
+                <input id="txtName" name="name" class="form-control" type="text" placeholder="请输权限名称" value="@Model.Name">
+            </div>
+            <div class="form-group">
+                <label class=" form-control-label">请选权限所属系统</label>
+                <select name="platformID" class="form-control" id="platformID">
+                    <option value="">请选择...</option>
+                    @foreach (var platform in platformList)
+                    {
+                        <option value="@platform.Id">@platform.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-control-label">Controller</label>
+                <input id="txtName" name="controller" class="form-control" type="text" placeholder="Controller或者{Controller1}{Controller2}..." value="@Model.Controller">
+            </div>
+            <div class="form-group">
+                <label class="form-control-label">Action</label>
+                <input id="txtName" name="action" class="form-control" type="text" placeholder="Action或者{Action1}{Action2}..." value="@Model.Action">
+            </div>
+            <div class="form-group">
+                <input type="button" class="btn btn-primary mt-5" id="submit" value="提交" />
+                <input type="hidden" name="id" value="@ViewBag.ID" />
+            </div>
+        </div>
+    </form>
+</div>
+@if (ViewBag.ID != null)
+{
+<div class="card">
+    <div class="card-header">
+        <label class=" form-control-label my-1">模块列表</label>
+        <button id="addQuery" class="btn btn-primary float-right" data-toggle="modal" data-target="#queryModal">添加模块</button>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped m-0">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">模块名称</th>
+                    <th scope="col">Selector</th>
+                    <th scope="col">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < queryList.Count; i++)
+                {
+                    <tr>
+                        <th scope="row">@(i + 1)</th>
+                        <td>@queryList[i].Name</td>
+                        <td>@queryList[i].Selector</td>
+                        <td>
+                            <input class="btn btn-primary queryUpdate" type="button" value="修改" data-id="@queryList[i].Id" data-name="@queryList[i].Name" data-selector="@queryList[i].Selector" data-toggle="modal" data-target="#queryModal" />
+                            <input class="btn btn-warning queryDelete" type="button" value="删除" data-id="@queryList[i].Id" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div tabindex="-1" class="modal fade" id="queryModal" role="dialog" aria-hidden="true" aria-labelledby="mediumModalLabel" style="display: none;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="formQuery">
+                <div class="modal-header">
+                    <h5 class="modal-title">配置模块</h5>
+                    <button class="close" aria-label="Close" type="button" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class=" form-control-label">模块名称</label>
+                        <input id="queryName" name="name" class="form-control" type="text" placeholder="请输模块名称" value="">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label">Selector</label>
+                        <input id="querySelector" name="selector" class="form-control" type="text" placeholder="请输Selector" value="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-secondary" data-dismiss="modal" value="取消" />
+                    <input type="hidden" id="queryID" name="id" value="" />
+                    <input type="hidden" name="functionID" value="@Model.Id" />
+                    <input id="btnQuerySet" class="btn btn-primary" type="button" value="确定" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+}
+@section js{
+<script type="text/javascript">
+    if ('@ViewBag.ID') {
+        $('#platformID').val('@Model.PlatformId').attr('disabled','disabled');
+    }
+    $('#submit').click(function () {
+        $.ajax({
+            url: '@Url.Action("UpdateFunction","Admin")',
+            type: 'post',
+            data: $('#formFunction').serialize(),
+            dataType: 'json',
+            success: function (json) {
+                if (json.status == 0) {
+                    location.href = '@Url.Action("Function","Admin", new { id="" })/' + json.id;
+                } else {
+                    alert(json.errorDescription);
+                }
+            }
+        });
+    });
+    $('#btnQuerySet').click(function () {
+        $.ajax({
+            url: '@Url.Action("UpdateQuery","Admin")',
+            type: 'post',
+            data: $('#formQuery').serialize(),
+            dataType: 'json',
+            success: function (json) {
+                if (json.status == 0) {
+                    location.reload();
+                } else {
+                    alert(json.errorDescription);
+                }
+            }
+        });
+    });
+    $('#addQuery').click(function () {
+        $('#queryName').val('');
+        $('#querySelector').val('');
+        $('#queryID').val('');
+    });
+    $('.queryUpdate').click(function () {
+        $('#queryName').val($(this).data('name'));
+        $('#querySelector').val($(this).data('selector'));
+        $('#queryID').val($(this).data('id'));
+    });
+    $('.queryDelete').click(function () {
+        if (confirm('确认删除？')) {
+            $.ajax({
+                url: '@Url.Action("DeleteQuery","Admin")',
+                type: 'post',
+                data: 'id=' + $(this).data('id'),
+                dataType: 'json',
+                success: function (json) {
+                    if (json.status == 0) {
+                        location.reload();
+                    } else {
+                        alert(json.errorDescription);
+                    }
+                }
+            });
+        }
+    });
+</script>
+}

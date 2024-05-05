@@ -1,0 +1,19 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>跳转中...</title>
+    <script type="text/javascript">
+        if (location.href != top.location.href) {
+            top.location.href = '@ViewBag.RedirectUri';
+        } else {
+            location.href = '@ViewBag.RedirectUri';
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>

@@ -1,0 +1,89 @@
+﻿@{
+    Layout = "_Layout";
+    iSchool.Authorization.Models.AdminInfo adminInfo = ViewData["adminInfo"] as iSchool.Authorization.Models.AdminInfo;
+}
+<!-- Right Panel -->
+<div id="right-panel" class="right-panel">
+    <!-- Header-->
+    <header id="header" class="header">
+        <div class="header-menu">
+            <div class="row m-0">
+                <div class="col-7">
+                    <div class="header-left">
+                        @*<button class="search-trigger"><i class="fa fa-search"></i></button>
+                            <div class="form-inline">
+                                <form class="search-form">
+                                    <input class="form-control mr-sm-2" type="text" placeholder="Search ..." aria-label="Search">
+                                    <button class="search-close" type="submit"><i class="fa fa-close"></i></button>
+                                </form>
+                            </div>*@
+
+                        <div class="dropdown for-notification">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="notification" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-bell"></i>
+                                @*<span class="count bg-danger">5</span>*@
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="notification">
+                                <a class="dropdown-item media" href="@Url.Action("ChangePSW", "Account")">
+                                    <i class="fa fa-exclamation-circle"></i>
+                                    <p>您的密码即将过期</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-5">
+                    <div class="user-area dropdown float-right">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @adminInfo.Displayname
+                        </a>
+                        <div class="user-menu dropdown-menu">
+                            <a class="nav-link" href="@Url.Action("Detail", "Account")"><i class="fa fa- user"></i>我的资料</a>
+                            <a class="nav-link" href="@Url.Action("ChangePSW", "Account")"><i class="fa fa -cog"></i>修改密码</a>
+                            <a class="nav-link" href="@Url.Action("Logout", "Account")"><i class="fa fa-power -off"></i>退出登录</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </header><!-- /header -->
+    <!-- Header-->
+    <div class="breadcrumbs">
+        <div class="breadcrumbs-inner">
+            <div class="row m-0">
+                <div class="col-sm-4">
+                    <div class="page-header float-left">
+                        <div class="page-title">
+                            <h1>@ViewData["Title"]</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        @RenderBody()
+    </div>
+
+    <div class="clearfix"></div>
+
+    <footer class="site-footer">
+        <div class="footer-inner bg-white">
+            <div class="row">
+                <div class="col-sm-6">
+                    Copyright © 2018 <a href="https://demos.jweltheme.com/sufee-Admin">Sufee Admin</a>
+                </div>
+                <div class="col-sm-6 text-right">
+                    Designed with Love by <a href="https://jeweltheme.com/">Jewel Theme</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div><!-- /#right-panel -->
+<!-- Right Panel -->
+@section js{
+    <script src="~/assets/js/lib/chart-js/Chart.bundle.js"></script>
+    @RenderSection("js", false)
+}

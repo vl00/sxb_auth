@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewData["Title"] = "Form";
+    Layout = "~/Views/Shared/_MobileLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.V4FileServer/css/mine/feedback-detail.css" />
+    <link rel="stylesheet" href="@ViewBag.V4FileServer/css/mine/correct-errors.css">
+}
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">客服留言</span>
+    <span class=""></span>
+</header>
+
+<section class="mt box">
+    <h5 class="title">客服小姐姐时刻为您服务</h5>
+    <div class="textarea">
+        <textarea name="" id="" cols="30" rows="10" placeholder="请输入您遇到的问题"></textarea>
+    </div>
+    <h5 class="title">请上传图片（选填）</h5>
+    <div class="upload-img flex">
+        <ul class="img-list flex">
+            <li class="upload-btn text-center">
+                <p><i class="icon"></i></p>
+                <p>上传照片</p>
+                <input type="file" name="image" accept="image/*">
+            </li>
+        </ul>
+    </div>
+    <div>
+        <p class="tips">*提交后我们将第一时间处理您的反馈并通过消息系统通知您</p>
+        <div>
+            <a href="javascript:;" class="submit-btn text-center">提交</a>
+        </div>
+    </div>
+</section>

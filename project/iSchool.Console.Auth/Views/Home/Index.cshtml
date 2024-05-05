@@ -1,0 +1,169 @@
+﻿@model List<iSchool.Authorization.Models.Platform>
+@{
+    ViewData["Title"] = "平台入口";
+    Layout = "_Right";
+    iSchool.Authorization.Models.AdminInfo adminInfo = ViewData["adminInfo"] as iSchool.Authorization.Models.AdminInfo;
+    if (adminInfo.Character!=null)
+    {
+        foreach(var character in adminInfo.Character)
+        {
+            if (character.Function.Any(a => a.PlatformId.Equals(0)))
+            {
+                Layout = "_Frame";
+                break;
+            }
+        }
+    }
+    List<string> iconClass = new List<string> { "pe-7f-users", "pe-7f-usb", "pe-7f-info", "pe-7f-note", "pe-7f-cart", "pe-7f-like", "pe-7f-airplay" };
+}
+
+<div class="row">
+    @foreach (var platform in Model)
+    {
+        <a href="@(platform.Id.Equals(0)?Url.Action("List","Admin"):("//"+platform.Domain))" class="col-md-6 col-lg-4">
+            <div class="card text-white bg-flat-color-1">
+                <div class="card-body">
+                    <div class="card-left pt-1 float-left">
+                        <h3 class="mb-0 fw-r">
+                            <span class="currency mr-1">@platform.Name</span>
+                        </h3>
+                        @*<p class="text-light mt-1 m-0">Data Center</p>*@
+                    </div><!-- /.card-left -->
+                    <div class="card-right float-right text-right">
+                        <i class="icon fade-5 icon-lg @iconClass[platform.Id]"></i>
+                    </div><!-- /.card-right -->
+                </div>
+            </div>
+        </a>
+    }
+
+    @*@if (Model.Any(a => a.Id.Equals(1)))
+        {
+            <a href="\\@Model.Find(a=>a.Id.Equals(0)).Domain\" class="col-md-6 col-lg-4">
+                <div class="card text-white bg-flat-color-1">
+                    <div class="card-body">
+                        <div class="card-left pt-1 float-left">
+                            <h3 class="mb-0 fw-r">
+                                <span class="currency mr-1">数据中心管理平台</span>
+                            </h3>
+                            <p class="text-light mt-1 m-0">Data Center</p>
+                        </div><!-- /.card-left -->
+                        <div class="card-right float-right text-right">
+                            <i class="icon fade-5 icon-lg pe-7f-info"></i>
+                        </div><!-- /.card-right -->
+                    </div>
+                </div>
+            </a>
+        }
+        @if (Model.Any(a => a.Id.Equals(2)))
+        {
+            <a href="\\@Model.Find(a=>a.Id.Equals(0)).Domain\" class="col-md-6 col-lg-4">
+                <div class="card text-white bg-flat-color-1">
+                    <div class="card-body">
+                        <div class="card-left pt-1 float-left">
+                            <h3 class="mb-0 fw-r">
+                                <span class="currency mr-1">大数据中心</span>
+                            </h3>
+                            <p class="text-light mt-1 m-0">Big Data Center</p>
+                        </div><!-- /.card-left -->
+                        <div class="card-right float-right text-right">
+                            <i class="icon fade-5 icon-lg pe-7f-usb"></i>
+                        </div><!-- /.card-right -->
+                    </div>
+                </div>
+            </a>
+        }
+        @if (Model.Any(a => a.Id.Equals(3)))
+        {
+            <a href="\\@Model.Find(a=>a.Id.Equals(0)).Domain\" class="col-md-6 col-lg-4">
+                <div class="card text-white bg-flat-color-1">
+                    <div class="card-body">
+                        <div class="card-left pt-1 float-left">
+                            <h3 class="mb-0 fw-r">
+                                <span class="currency mr-1">运营管理系统</span>
+                            </h3>
+                            <p class="text-light mt-1 m-0">Operation System</p>
+                        </div><!-- /.card-left -->
+                        <div class="card-right float-right text-right">
+                            <i class="icon fade-5 icon-lg pe-7f-note"></i>
+                        </div><!-- /.card-right -->
+                    </div>
+                </div>
+            </a>
+        }
+        @if (Model.Any(a => a.Id.Equals(4)))
+        {
+            <a href="\\@Model.Find(a=>a.Id.Equals(0)).Domain\" class="col-md-6 col-lg-4">
+                <div class="card text-white bg-flat-color-1">
+                    <div class="card-body">
+                        <div class="card-left pt-1 float-left">
+                            <h3 class="mb-0 fw-r">
+                                <span class="currency mr-1">产品管理系统</span>
+                            </h3>
+                            <p class="text-light mt-1 m-0">Production Center</p>
+                        </div><!-- /.card-left -->
+                        <div class="card-right float-right text-right">
+                            <i class="icon fade-5 icon-lg pe-7f-cart"></i>
+                        </div><!-- /.card-right -->
+                    </div>
+                </div>
+            </a>
+        }
+        @if (Model.Any(a => a.Id.Equals(5)))
+        {
+            <a href="\\@Model.Find(a=>a.Id.Equals(0)).Domain\" class="col-md-6 col-lg-4">
+                <div class="card text-white bg-flat-color-1">
+                    <div class="card-body">
+                        <div class="card-left pt-1 float-left">
+                            <h3 class="mb-0 fw-r">
+                                <span class="currency mr-1">学校合作开放平台</span>
+                            </h3>
+                            <p class="text-light mt-1 m-0">Cooperation Platform</p>
+                        </div><!-- /.card-left -->
+                        <div class="card-right float-right text-right">
+                            <i class="icon fade-5 icon-lg pe-7f-like"></i>
+                        </div><!-- /.card-right -->
+                    </div>
+                </div>
+            </a>
+        }
+        @if (Model.Any(a => a.Id.Equals(6)))
+        {
+            <a href="\\@Model.Find(a=>a.Id.Equals(0)).Domain\" class="col-md-6 col-lg-4">
+                <div class="card text-white bg-flat-color-1">
+                    <div class="card-body">
+                        <div class="card-left pt-1 float-left">
+                            <h3 class="mb-0 fw-r">
+                                <span class="currency mr-1">广告管理平台</span>
+                            </h3>
+                            <p class="text-light mt-1 m-0">Advertising Platform</p>
+                        </div><!-- /.card-left -->
+                        <div class="card-right float-right text-right">
+                            <i class="icon fade-5 icon-lg pe-7f-airplay"></i>
+                        </div><!-- /.card-right -->
+                    </div>
+                </div>
+            </a>
+        }
+        @if (Model.Any(a => a.Id.Equals(0)))
+        {
+            <a href="\\@Model.Find(a=>a.Id.Equals(0)).Domain\" class="col-md-6 col-lg-4">
+                <div class="card text-white bg-flat-color-1">
+                    <div class="card-body">
+                        <div class="card-left pt-1 float-left">
+                            <h3 class="mb-0 fw-r">
+                                <span class="currency mr-1">用户中心</span>
+                            </h3>
+                            <p class="text-light mt-1 m-0">User Center</p>
+                        </div><!-- /.card-left -->
+                        <div class="card-right float-right text-right">
+                            <i class="icon fade-5 icon-lg pe-7f-users"></i>
+                        </div><!-- /.card-right -->
+                    </div>
+                </div>
+            </a>
+        }*@
+</div>
+@section js{
+    <script src="~/assets/js/lib/chart-js/Chart.bundle.js"></script>
+}

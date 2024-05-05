@@ -1,0 +1,111 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <script type="text/javascript" src="../internal.js"></script>
+    <style type="text/css">
+        *{margin:0;padding:0;color: #838383;}
+        table{font-size: 12px;margin: 10px;line-height: 30px}
+        .txt{width:300px;height:21px;line-height:21px;border:1px solid #d7d7d7;}
+        .iconSelect label { width: 30px; height: 30px; display:inline-block; margin:0 10px 0 0; background-size:100% 100%; border:2px #fff solid; overflow:hidden; cursor:pointer;}
+        .iconSelect label.selected {border:2px #f00 solid;}
+        .iconSelect label input {margin-left:-9999px;}
+        .imgBox img {display:none; width:200px;}
+        .imgBox img.show {display:block;}
+    </style>
+</head>
+<body>
+    <form id="form">
+    <table>
+        <tr>
+            <td><label>图标：</label></td>
+            <td class="iconSelect">
+                <label style="background-image:url('https://cdn.sxkid.com/images/www/v4/icon/article_linkbox_1.png');"><input type="radio" name="icon" value="1" /></label>
+                <label style="background-image:url('https://cdn.sxkid.com/images/www/v4/icon/article_linkbox_2.png');"><input type="radio" name="icon" value="2" /></label>
+                <label style="background-image:url('https://cdn.sxkid.com/images/www/v4/icon/article_linkbox_3.png');"><input type="radio" name="icon" value="3" /></label>
+                <label style="background-image:url('https://cdn.sxkid.com/images/www/v4/icon/article_linkbox_4.png');"><input type="radio" name="icon" value="4" /></label>
+                <label style="background-image:url('https://cdn.sxkid.com/images/www/v4/icon/article_linkbox_5.png');"><input type="radio" name="icon" value="5" /></label>
+                <label style="background-image:url('https://cdn.sxkid.com/images/www/v4/icon/article_linkbox_6.png');"><input type="radio" name="icon" value="6" /></label>
+                <label style="background-image:url('https://cdn.sxkid.com/images/www/v4/icon/article_linkbox_7.png');"><input type="radio" name="icon" value="7" /></label>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="name">应用名：</label></td>
+            <td><input class="txt" id="name" name="name" type="text" /></td>
+        </tr>
+        <tr>
+            <td><label for="title">标题：</label></td>
+            <td><input class="txt" id="title" name="title" type="text" /></td>
+        </tr>
+        <tr>
+            <td><label for="url">链接：</label></td>
+            <td><input class="txt" id="url" name="url" type="text" /></td>
+        </tr>
+        <tr>
+            <td><label for="img">图片</label></td>
+            <td class="imgBox">
+                <input type="file" />
+                <img />
+                <input type="hidden" id="img" name="img" />
+            </td>
+        </tr>
+    </table>
+    </form>
+    <script type="text/javascript" src="https://file.sxkid.com/js/lib/jquery.js"></script>
+    <script type="text/javascript">
+
+        ////可以直接使用以下全局变量
+        ////当前打开dialog的实例变量
+        //alert('editor: ' + editor);
+        ////一些常用工具
+        //alert('domUtils: ' + domUtils);
+        //alert('utils: ' + utils);
+        //alert('browser: ' + browser);
+
+        $('.iconSelect input:radio').change(function () {
+            if ($(this).is(':checked')) {
+                $(this).parent().addClass('selected').siblings().removeClass('selected');
+            }
+        })
+
+        $('.imgBox input').change(function () {
+            var data = new FormData();
+            data.append('upfile', $(this).get(0).files[0]);
+            $.ajax({
+                url: '/Ueditor/uploadimage?articleID=' + editor.queryCommandValue('serverparam').articleID + '&encode=utf-8',
+                data: data,
+                type: 'post',
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+                success: function (json) {
+                    if (json.state == 'SUCCESS') {
+                        var baseUrl = editor.getOpt('imageUrlPrefix');
+                        $('.imgBox img').addClass('show').attr('src', baseUrl + json.url);
+                        $('#img').val(baseUrl + json.url);
+                    }
+                }
+            });
+        })
+
+        function queryString(keyword, query) {
+            var reg = new RegExp('(^|\\?|&)(' + keyword + ')=([^&]*)', "im");
+            var res = query.match(reg);
+            return res ? res[res.length - 1] : '';
+        }
+        function handleDialogOk() {
+            var frameID = 'frame_' + Date.now();
+            var params = $('#form').serialize();
+            var frameURL = '/Article/LinkCard?' + params;
+            params = decodeURIComponent(params);
+            var frameTag = '<iframe name="' + frameID + '" src="' + frameURL + '" scrolling="no" frameborder="0" width="329" height="0" onload="this.height=' + frameID + '.document.body.scrollHeight" class="linkBoxFrame"></iframe>';
+            editor.execCommand("insertHtml", frameTag);
+            dialog.close();
+        }
+
+        dialog.onok = handleDialogOk;
+    </script>
+</body>
+</html>

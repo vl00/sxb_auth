@@ -1,0 +1,57 @@
+﻿@model List<iSchool.Sites.UserCenter.Models.ViewsModels.Collection.School>
+@{
+    Layout = null;
+}
+<ul class="content-list">
+    @foreach (var school in Model)
+    {
+    <li>
+        <div class="flex">
+            <div class="school-msg">
+                <a href="@school.ExtId">
+                    <div class="school-name">
+                        <h5>@school.SchoolName - @school.ExtName</h5>
+                    </div>
+                    <ul class="tag flex">
+                        <li>@iSchool.Sites.UserCenter.Library.CommonHelper.GetDescriptionFromEnumValue(school.Type)</li>
+                        @if (school.Lodging != null && school.Lodging.Value)
+                        {
+                        <li>寄宿</li>
+                        }
+                        <li class="bcg-none"><i class="icon"></i></li>
+                    </ul>
+                    <div class="price">
+                        @(school.Tuition!=null? school.Tuition.Value + "万/年":"暂未收录")
+                        <span class="range">@school.Distance</span>
+                        <span class="area">@school.CityName | @school.AreaName</span>
+                    </div>
+                    <ul class="keyword flex text-center">
+                        @foreach (var tag in school.Tags)
+                        {
+                            <li>@tag</li>
+                        }
+                    </ul>
+                </a>
+            </div>
+            <div class="school-grade text-center">
+                @if (school.Score != null)
+                {
+                    <div class="score">
+                        <span class="num">@school.Score</span>
+                        <span>分</span>
+                    </div>
+                    <p>学校总评</p>
+                    <a href="./school-detail/school-detail.html">
+                        <span class="btn">评分详情</span>
+                    </a>
+                }
+                else
+                {
+                    <div class="not-score">暂未评分</div>
+                    <p>学校总评</p>
+                }
+            </div>
+        </div>
+    </li>
+    }
+</ul>

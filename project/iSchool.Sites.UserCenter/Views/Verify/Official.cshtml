@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewData["Title"] = "Official";
+    Layout = "~/Views/Shared/_MobileLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.V4FileServer/css/mine/authentication.css" />
+}
+<header class="header flex justify-content-between">
+    <a href="@Url.Action("Index")" class="arrow"></a>
+    <span class="header-title">校方用户认证</span>
+    <span class=""></span>
+</header>
+
+<section class="mt school">
+    <div class="title text-center">
+        <div class="text">
+            <h5>校方用户认证</h5>
+            <p>进驻平台，为学校代言</p>
+        </div>
+    </div>
+    <div class="content">
+        <div class="condition">
+            <h5 class="title text-center">申请条件</h5>
+            <div class="list">
+                <ul>
+                    <li class="flex justify-content-between">
+                        <div class="head flex">
+                            <i class="mine-icon"></i>
+                            <div>
+                                <p>清晰头像</p>
+                                <a href="">上传头像>></a>
+                            </div>
+                        </div>
+                        <i class="mine-icon satisfy unsatisfy"></i>
+                    </li>
+                    <li class="flex justify-content-between">
+                        <div class="phone flex">
+                            <i class="mine-icon"></i>
+                            <div>
+                                <p>绑定手机</p>
+                                <a href="">马上绑定>></a>
+                            </div>
+                        </div>
+                        <i class="mine-icon unsatisfy"></i>
+                    </li>
+                    <li class="flex justify-content-between">
+                        <div class="sxb flex">
+                            <i class="mine-icon"></i>
+                            <div>
+                                <p>通过上学帮开放平台学校认证</p>
+                                <a href="">马上认证>></a>
+                            </div>
+                        </div>
+                        <i class="mine-icon unsatisfy"></i>
+                    </li>
+                    <li class="flex justify-content-between">
+                        <div class="message flex">
+                            <i class="mine-icon"></i>
+                            <div>
+                                <p>已收录所属学校的信息</p>
+                                <a href="">申请收录>></a>
+                            </div>
+                        </div>
+                        <i class="mine-icon satisfy unsatisfy"></i>
+                    </li>
+                </ul>
+                <a href="" class="text-center submit-btn can-submit">立即申请</a>
+            </div>
+        </div>
+
+        <div class="privilege text-center">
+            <h5 class="title">认证特权</h5>
+            <ul class="flex">
+                <li>
+                    <div><i class="mine-icon school-icon"></i></div>
+                    <div>校方认证标识</div>
+                    <p>权威身份，易于辨识</p>
+                </li>
+                <li>
+                    <div><i class="mine-icon"></i></div>
+                    <div>官方推荐</div>
+                    <p>邀请页推荐，便于分享</p>
+                </li>
+                <li>
+                    <div><i class="mine-icon top-icon"></i></div>
+                    <div>回复置顶</div>
+                    <p>最显眼的展示位置<br>及时传达回应</p>
+                </li>
+                <li>
+                    <div><i class="mine-icon"></i></div>
+                    <div>辟谣功能</div>
+                    <p>专属点评的回复功能<br>助你引导舆论</p>
+                </li>
+            </ul>
+        </div>
+
+        <div class="question-list">
+            <h5 class="title text-center">常见问题</h5>
+            <ul>
+                <li><a href="">认证周期所需时间？<i class="arrow"></i></a></li>
+                <li><a href="">身份认证后能否修改昵称？<i class="arrow"></i></a></li>
+            </ul>
+            <a href="" class="more-question text-center">查看更多问题></a>
+        </div>
+    </div>
+</section>

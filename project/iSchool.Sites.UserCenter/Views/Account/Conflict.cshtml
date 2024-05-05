@@ -1,0 +1,58 @@
+﻿@model (iSchool.Sites.UserCenter.Models.dbo.UserInfo myInfo, List<iSchool.Sites.UserCenter.Models.dbo.UserInfo> list, string data, byte dataType)
+@{
+    ViewData["Title"] = "Conflict";
+    Layout = "~/Views/Shared/_MobileLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.V4FileServer/css/mine/account-conflict.css" />
+}
+<header class="header flex justify-content-between">
+    <i class="arrow"></i>
+    <span class="header-title">账号冲突</span>
+    <span class=""></span>
+</header>
+
+<section class="account-conflict">
+    <div>
+        <h5 class="title">请先验证冲突账号</h5>
+        <!-- 查看冲突 显示 -->
+        @if (string.IsNullOrEmpty(Model.data))
+        {
+            <p class="msg">请确认冲突账号是否继续使用，如放弃使用可直接点击确定转绑”</p>
+        }
+        else
+        {
+            <p class="msg">请手动登录冲突账号确认是否继续使用，如放弃使用可通过该账号更换手机号释放“@Model.data.Substring(0, 3)****@Model.data.Substring(7)”</p>
+        }
+    </div>
+    <div class="list">
+        <ul>
+            <li class="flex">
+                <div class="img-box"><img src="@Model.myInfo.HeadImgUrl" alt="@Model.myInfo.Nickname"></div>
+                <div class="user-name">当前账号昵称：<span>@Model.myInfo.Nickname</span></div>
+            </li>
+            @foreach (var user in Model.list)
+            {
+                <li class="flex">
+                    <div class="img-box"><img src="@user.HeadImgUrl" alt="@user.Nickname"></div>
+                    <div>
+                        <div class="user-name">冲突账号昵称：<span>@user.Nickname</span></div>
+                        @if (!string.IsNullOrEmpty(Model.data))
+                        {
+                            <div class="phone-num">@Model.data.Substring(0, 3)****@Model.data.Substring(7)</div>
+                        }
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+    <!-- 查看冲突 显示 -->
+    @if (!string.IsNullOrEmpty(Model.data))
+    {
+        <a href="@Url.Action("Logout", new { redirect_uri = Url.Action("Index") })" class="btn text-center">切换到冲突账号</a>
+    }
+    else
+    {
+        <a href="@Url.Action("Bind", new { dataType=Model.dataType, confirm = true })" class="btn text-center">转绑</a>
+    }
+</section>

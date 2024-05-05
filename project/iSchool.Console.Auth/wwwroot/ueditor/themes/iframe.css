@@ -1,0 +1,10 @@
+﻿/*可以在这里添加你自己的css*/
+
+* {margin:0; padding:0;}
+p { word-wrap: break-word; display: block; text-align: justify; font-family: "PingFangSC-Regular", sans-serif; font-size: 17px; line-height: 29px; color: #151515; padding: 4px 0 23px; }
+img { *width: 80%; max-width: 80%; display: block; clear: both; margin: 0 auto }
+h2 { font-family: "PingFangSC-Semibold", sans-serif; line-height: 29px; font-size: 19px; padding: 8px 0 26px; }
+blockquote { line-height: 1.4; padding: 12px 8px; color: #999; background-color: #F3F4F5; margin: 10px 0 }
+a { color: #5699F5; text-decoration: none; border: 0; outline: 0 }
+img, video { margin: 0.01rem auto 0.05rem; display: block; max-width: 329px; }
+iframe {display:block; margin:0 auto; width:100%;}

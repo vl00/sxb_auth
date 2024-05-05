@@ -1,0 +1,69 @@
+﻿@model List<iSchool.Authorization.Models.Character>
+@{
+    ViewData["Title"] = "角色配置";
+}
+<div class="card">
+    <div class="card-header">
+        <a href="@Url.Action("Character", "Admin")" class="btn btn-primary float-right">添加自定义角色</a>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">角色名称</th>
+                    <th scope="col">准入系统</th>
+                    <th scope="col">创建时间</th>
+                    <th scope="col">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < Model.Count; i++)
+                {
+                    <tr>
+                        <th scope="row">@(i + 1)</th>
+                        <td>@Model[i].Name</td>
+                        <td>
+                            @{
+                                List<byte> platformID = new List<byte>();
+                                foreach (var function in Model[i].Function)
+                                {
+                                    if (platformID.Contains(function.PlatformId)) { continue; }
+                                    platformID.Add(function.PlatformId);
+                                    @function.Platform.Name<br />
+                                }
+                            }
+                        </td>
+                        <td>@Model[i].Time</td>
+                        <td>
+                            <a href="@Url.Action("Character", "Admin", new { id = Model[i].Id })" class="btn btn-primary characterUpdata">编辑</a>
+                            <input class="btn btn-danger characterDelete" data-id="@Model[i].Id" type="button" value="删除" />
+                        </td>
+                    </tr>
+                                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@*@{await Html.RenderPartialAsync("~/Views/Shared/_Pager.cshtml");}*@
+@section js{
+    <script type="text/javascript">
+        $('.characterDelete').click(function () {
+            if (confirm('确认删除？')) {
+                $.ajax({
+                    url: '@Url.Action("DeleteCharacter","Admin")',
+                    type: 'post',
+                    data: 'id=' + $(this).data('id'),
+                    dataType: 'json',
+                    success: function (json) {
+                        if (json.status == 0) {
+                            location.reload();
+                        } else {
+                            alert(json.errorDescription);
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+}

@@ -1,0 +1,36 @@
+﻿@{
+    Layout = null;
+}
+<h5 class="select-title">常用</h5>
+<ul class="select-list">
+    <li>中国<span data-code="86">+86</span></li>
+    <li>中国香港<span data-code="852">+852</span></li>
+    <li>中国澳门<span data-code="853">+853</span></li>
+    <li>中国台湾<span data-code="886">+886</span></li>
+</ul>
+<script type="text/javascript">
+    var nationCodeInputID = '';
+    // 选择区号
+    $('.select-area .select-list').on('click', 'li', function () {
+        $('.select-area').animate({ 'left': '100%' }).removeClass('open');
+        $('.header-title').text($('.header-title').data('otitle'));
+        $('#' + nationCodeInputID).prev().html($(this).children('span').text() + '<i class="arrow"></i>');
+        $('#' + nationCodeInputID).val($(this).children('span').data('code'));
+    });
+    // 打开区号选择
+    $('.area-code').on('click', function () {
+        nationCodeInputID = $(this).data('for');
+        $('.select-area').animate({ 'left': 0 }).addClass('open');
+        $('.header-title').data('otitle', $('.header-title').text()).text('选择国家和地区');
+        
+        // 点击返回按钮
+        $('.header .arrow').on('click', function (e) {
+            e.preventDefault();
+            if ($('.select-area').hasClass('open')) {
+                $('.select-area').animate({ 'left': '100%' }).removeClass('open');
+                $('.header-title').text($('.header-title').data('otitle'));
+            }
+            $('.header .arrow').off('click');
+        });
+    });
+</script>

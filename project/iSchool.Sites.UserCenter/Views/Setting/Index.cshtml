@@ -1,0 +1,49 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_MobileLayout.cshtml";
+}
+@section  css{ 
+    <link rel="stylesheet" href="@ViewBag.V4FileServer/css/mine/setting.css" />
+}
+<header class="header flex justify-content-between">
+    <a href="/" class="arrow"></a>
+    <span class="header-title">通用设置</span>
+    <span class=""></span>
+</header>
+
+<section class="part-1">
+    <ul>
+        <li>
+            <a href="@Url.Action("Index","Account")">账号设置<i class="arrow"></i></a>
+        </li>
+        <li>
+            <a href="#">推送设置<i class="arrow"></i></a>
+        </li>
+        <li>
+            <a href="#" class="new-msg">推送记录<i class="arrow"></i></a>
+        </li>
+    </ul>
+</section>
+<section class="part-2">
+    <ul>
+        <li>
+            <a href="">关于我们<i class="arrow"></i></a>
+        </li>
+        <li>
+            <a href="">为我打call<i class="arrow"></i></a>
+        </li>
+        <li>
+            <a href="">告诉朋友<i class="arrow"></i></a>
+        </li>
+    </ul>
+</section>
+<section class="part-3">
+    <ul>
+        <li>
+            <a href="">清除缓存<i class="arrow"></i></a>
+        </li>
+        <li>
+            <a href="/Account/Logout">退出登录<i class="arrow"></i></a>
+        </li>
+    </ul>
+</section>

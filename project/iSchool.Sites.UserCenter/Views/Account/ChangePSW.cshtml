@@ -1,0 +1,103 @@
+﻿@model iSchool.Sites.UserCenter.Models.dbo.UserInfo
+@{
+    ViewData["Title"] = "ChangePSW";
+    Layout = "~/Views/Shared/_MobileLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.V4FileServer/css/mine/modify-password.css" />
+}
+<header class="header flex justify-content-between">
+    <a href="@Url.Action("Index")" class="arrow"></a>
+    <span class="header-title">密码修改</span>
+    <span class=""></span>
+</header>
+<section class="mt">
+    <div class="account-msg">
+        <h5>当前登录账号</h5>
+        <div class="flex">
+            <div><i class="icon"></i></div>
+            <div>
+                <div>手机号</div>
+                <p class="phone-num">@Model.Mobile.Substring(0, 3)****@Model.Mobile.Substring(7)</p>
+            </div>
+        </div>
+    </div>
+    <form id="form">
+        <div class="modify-password">
+            <ul>
+                <li>
+                    <span>新置密码：</span>
+                    <input id="password" name="password" type="hidden" />
+                    <input id="txtPassword" type="password" placeholder="请输入新密码">
+                    <i class="reset-input"></i>
+                    <i class="icon-2"></i>
+                </li>
+                <li>
+                    <span>确认密码：</span>
+                    <input id="txtRePassword" type="password" placeholder="请再次输入新密码">
+                    <i class="reset-input"></i>
+                    <i class="icon-2"></i>
+                </li>
+                <li>
+                    <div class="verification-code flex">
+                        <input id="rnd" name="rnd" type="text" maxlength="6" placeholder="请输入验证码">
+                        <span class="get-code text-center">获取验证码</span>
+                    </div>
+                </li>
+            </ul>
+            <p class="tips">*请输入包含英文字母及数字的8~11位密码</p>
+            <input type="hidden" id="txtMobile" value="self" />
+            <a id="submit" class="submit-btn text-center">确认</a>
+            <input type="hidden" name="kid" value="@ViewBag.Kid" />
+        </div>
+    </form>
+</section>
+@section js{
+    <script src="@ViewBag.V4FileServer/js/mine/modify-password.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileServer/js/plugin/rsa/System.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileServer/js/plugin/rsa/System.Text.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileServer/js/plugin/rsa/System.Security.Cryptography.RSA.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileServer/js/plugin/rsa/System.Convert.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileServer/js/plugin/rsa/System.Security.Cryptography.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileServer/js/plugin/rsa/System.BigInt.debug.js"></script>
+    <script type="text/javascript">
+        var publickey = '@Html.Raw(ViewBag.PublicKey)';
+        $('#txtPassword').val('');
+        //====================================================================================
+        function do_encrypt(plaintext) {
+            var decryptedBytes = System.Text.Encoding.UTF8.GetBytes(plaintext);
+            var doOaepPadding = false;
+            // ------------------------------------------------
+            // Encrypt
+            // ------------------------------------------------
+            var rsa = GetNewRsaProvider();
+            // Import the RSA Key information.
+            rsa.ImportParameters(GetRsaKey(false));
+            // Encrypt the passed byte array and specify OAEP padding.
+            var encryptedBytes = rsa.Encrypt(decryptedBytes, doOaepPadding);
+            var encryptedString = System.Convert.ToBase64String(encryptedBytes)
+            // ------------------------------------------------
+            // Display the encrypted data.
+            //var encryptedString = System.BitConverter.ToString(encryptedBytes, "");
+            return encryptedString;
+        }
+        function GetRsaKey(includePrivateParameters) {
+            var xmlParams = publickey;
+            // ------------------------------------------------
+            // RSA Keys
+            // ------------------------------------------------
+            var rsa = GetNewRsaProvider();
+            // Import parameters from xml.
+            rsa.FromXmlString(xmlParams);
+            // Export RSA key to RSAParameters and include:
+            //    false - Only public key required for encryption.
+            //    true  - Private key required for decryption.
+            return rsa.ExportParameters(includePrivateParameters);
+        }
+        function GetNewRsaProvider(dwKeySize) {
+            // Create a new instance of RSACryptoServiceProvider.
+            if (!dwKeySize) dwKeySize = 512;
+            return new System.Security.Cryptography.RSACryptoServiceProvider(dwKeySize);
+        }
+    </script>
+}

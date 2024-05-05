@@ -1,0 +1,150 @@
+﻿@model iSchool.Sites.UserCenter.Models.dbo.UserInfo
+@{
+    ViewData["Title"] = "ChangeMobile";
+    Layout = "~/Views/Shared/_MobileLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.V4FileServer/css/mine/replace-phone.css">
+    <link rel="stylesheet" href="@ViewBag.V4FileServer/css/login/select-area.css" />
+}
+
+<header class="header flex justify-content-between">
+    <a href="@Url.Action("Index")" class="arrow"></a>
+    <span class="header-title">绑定手机号</span>
+    <span class=""></span>
+</header>
+
+<section style="padding-top: 54px;">
+    <form id="form" method="post">
+        @if (string.IsNullOrEmpty(Model.Mobile))
+        {
+            <div class="text-center title-text">为了你的账号安全及正常使用，<br>依照相关法律法规，请绑定手机号</div>
+            <div class="replace-phone flex">
+                <a href="javascript:;" class="area-code" data-for="nationCode_n">
+                    <span>+86 <i class="arrow"></i></span>
+                    <input id="nationCode_n" type="hidden" name="nationCode_n" value="86" />
+                </a>
+                <input id="txtMobile_n" type="number" placeholder="请输入手机号">
+                <input id="mobile_n" type="hidden" name="mobile_n" />
+            </div>
+        }
+        else
+        {
+            <div class="text-center title-text">更换绑定的手机号之后可<br>以用新手机号及当前密码登录</div>
+            <div class="replace-phone flex">
+                <a href="javascript:;" class="area-code" data-for="nationCode_o">
+                    <span>+86 <i class="arrow"></i></span>
+                    <input id="nationCode_o" type="hidden" name="nationCode_o" value="86" />
+                </a>
+                <input id="txtMobile_o" type="number" placeholder="请输入当前绑定的手机号">
+                <input id="mobile_o" type="hidden" name="mobile_o" />
+            </div>
+            <div class="confirm-phone flex">
+                <a href="javascript:;" class="area-code" data-for="nationCode_n">
+                    <span>+86 <i class="arrow"></i></span>
+                    <input id="nationCode_n" type="hidden" name="nationCode_n" value="86" />
+                </a>
+                <input id="txtMobile_n" type="number" placeholder="请输入新手机号">
+                <input id="mobile_n" type="hidden" name="mobile_n" />
+            </div>
+        }
+        <div class="verification-code flex">
+            <input id="rnd" name="rnd" type="number" placeholder="请输入验证码">
+            <span id="getCode" class="get-code text-center">获取验证码</span>
+            <input type="hidden" name="kid" value="@ViewBag.Kid" />
+            <input id="data" type="hidden" name="data" />
+            <input name="dataType" type="hidden" value="0" />
+        </div>
+    </form>
+</section>
+
+<section class="submit-btn text-center">
+    <a id="submit">确认</a>
+</section>
+
+<section>
+    <p class="tips text-center">根据<a href="javascript:;" class="clause">《互联网跟帖评论服务管理规定》</a>要求，发<br>布评论需要进行身份验证，为保证你能正常评<br>论，建议尽快完成手机号绑定</p>
+</section>
+
+<div class="select-area"></div>
+
+@section js{
+    <script src="@ViewBag.V4FileServer/js/mine/replace-phone.js"></script>
+
+    <script type="text/javascript" src="@ViewBag.FileServer/js/plugin/rsa/System.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileServer/js/plugin/rsa/System.Text.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileServer/js/plugin/rsa/System.Security.Cryptography.RSA.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileServer/js/plugin/rsa/System.Convert.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileServer/js/plugin/rsa/System.Security.Cryptography.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileServer/js/plugin/rsa/System.BigInt.debug.js"></script>
+
+    <script type="text/javascript">
+        var publickey = '@Html.Raw(ViewBag.PublicKey)';
+        $('#submit').click(function () {
+            if ($('#txtMobile_o').length>0 && $('#txtMobile_o').val() != '') {
+                $('#mobile_o').val(do_encrypt($('#txtMobile_o').val()));
+            }
+            if ($('#txtMobile_n').val() != '') {
+                $('#mobile_n').val(do_encrypt($('#txtMobile_n').val()));
+            }
+            $.ajax({
+                type: 'post',
+                data: $('#form').serialize(),
+                dataType: 'json',
+                success: function (json) {
+                    if (json.status == 0) {
+                        $.prompt('新手机号绑定成功');
+                        $('.prompt-cancel').click(function () {
+                            location.replace('@Url.Action("Index")');
+                        });
+                    } else {
+                        if (json.errorDescription == '账号冲突') {
+                            $('#data').val($('#mobile_n').val())
+                            $('#form').attr('action', '@Url.Action("Conflict")').submit();
+                        } else {
+                            $.prompt(json.errorDescription);
+                        }
+                    }
+                }
+            });
+        });
+
+    //====================================================================================
+
+    function do_encrypt(plaintext) {
+        var decryptedBytes = System.Text.Encoding.UTF8.GetBytes(plaintext);
+        var doOaepPadding = false;
+        // ------------------------------------------------
+        // Encrypt
+        // ------------------------------------------------
+        var rsa = GetNewRsaProvider();
+        // Import the RSA Key information.
+        rsa.ImportParameters(GetRsaKey(false));
+        // Encrypt the passed byte array and specify OAEP padding.
+        var encryptedBytes = rsa.Encrypt(decryptedBytes, doOaepPadding);
+        var encryptedString = System.Convert.ToBase64String(encryptedBytes)
+        // ------------------------------------------------
+        // Display the encrypted data.
+        //var encryptedString = System.BitConverter.ToString(encryptedBytes, "");
+        return encryptedString;
+    }
+    function GetRsaKey(includePrivateParameters) {
+        var xmlParams = publickey;
+        // ------------------------------------------------
+        // RSA Keys
+        // ------------------------------------------------
+        var rsa = GetNewRsaProvider();
+        // Import parameters from xml.
+        rsa.FromXmlString(xmlParams);
+        // Export RSA key to RSAParameters and include:
+        //    false - Only public key required for encryption.
+        //    true  - Private key required for decryption.
+        return rsa.ExportParameters(includePrivateParameters);
+    }
+    function GetNewRsaProvider(dwKeySize) {
+        // Create a new instance of RSACryptoServiceProvider.
+        if (!dwKeySize) dwKeySize = 512;
+        return new System.Security.Cryptography.RSACryptoServiceProvider(dwKeySize);
+    }
+    </script>
+}

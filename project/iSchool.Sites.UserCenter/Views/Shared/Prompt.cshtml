@@ -1,0 +1,13 @@
+﻿@model (string str, string redirect_uri);
+@{
+    ViewData["Title"] = "Prompt";
+    Layout = "~/Views/Shared/_MobileLayout.cshtml";
+}
+@section  js{ 
+<script type="text/javascript">
+    $.prompt('@Model.str');
+    $('.prompt-cancel').click(function () {
+        location.replace('@Model.redirect_uri');
+    });
+</script>
+}

@@ -1,0 +1,21 @@
+﻿@model  byte
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Bind</title>
+</head>
+<body>
+    <form id="form" action="@Url.Action("Conflict")" method="post">
+        <input type="hidden" name="dataType" value="@Model" />
+    </form>
+    <script type="text/javascript">
+        document.getElementById("form").submit();
+    </script>
+</body>
+</html>

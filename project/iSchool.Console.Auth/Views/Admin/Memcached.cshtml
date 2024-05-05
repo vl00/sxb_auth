@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Memcached缓存管理";
+}
+@section css{ 
+<style type="text/css">
+    .submit, .delete {display: none; }
+</style>
+}
+<div>
+    <div class="card">
+        <div class="card-body card-block">
+            <div class="form-group"><label class=" form-control-label" for="company">Key</label><input id="key" class="form-control" type="text" /></div>
+            <div class="form-group"><label class=" form-control-label" for="country">Value</label><input id="value" class="form-control" type="text" readonly /></div>
+            <button class="btn btn-success submit" type="button" id="GetMemcached"><i class="fa fa-file"></i>&nbsp; 查询</button>
+            <button class="btn btn-danger delete" type="button" id="RemoveMemcached"><i class="fa fa-remove"></i>&nbsp; 删除</button>
+        </div>
+    </div>
+</div>
+@section js{ 
+<script type="text/javascript">
+    $('@Context.Items["PageQuery"]').show();
+    $('#GetMemcached').click(function () {
+        $.ajax({
+            url: '@Url.Action("GetMemcached","Admin")',
+            type:'post',
+            data: { key : $('#key').val() },
+            dataType: 'json',
+            success: function (json) {
+                if (json.status == 0) {
+                    $('#value').val(json.value);
+                }
+            }
+        });
+    })
+    $('#RemoveMemcached').click(function () {
+        $.ajax({
+            url: '@Url.Action("RemoveMemcached","Admin")',
+            type:'post',
+            data: { key : $('#key').val() },
+            dataType: 'json',
+            success: function (json) {
+                if (json.status == 0) {
+                    $('#value').val(json.value);
+                }
+            }
+        });
+    })
+</script>
+}

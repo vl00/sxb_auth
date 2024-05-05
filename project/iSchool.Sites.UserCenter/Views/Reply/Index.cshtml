@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_MobileLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.V4FileServer/css/mine/mine-reply.css" />
+}
+<section>
+    <ul class="tab flex text-center">
+        <li class="active">点评</li>
+        <li>问答</li>
+    </ul>
+</section>
+
+<section>
+    <div class="content"></div>
+</section>
+@section js{
+    <script src="@ViewBag.V4FileServer/js/mine/mine-reply.js"></script>
+}
+

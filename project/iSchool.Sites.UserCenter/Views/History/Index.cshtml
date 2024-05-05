@@ -1,0 +1,34 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_MobileLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.V4FileServer/css/mine/history.css">
+}
+<header class="header flex justify-content-between">
+    <a href="/" class="arrow"></a>
+    <span class="header-title">历史足迹</span>
+    <span class="btn">编辑</span>
+</header>
+
+<nav class="tab flex justify-content-between text-center">
+        <li class="active"><i class="icon"></i>学校</li>
+        <li><i class="icon"></i>点评</li>
+        <li><i class="icon"></i>问答</li>
+        <li><i class="icon"></i>攻略</li>
+</nav>
+
+<section>
+    <div class="content"></div>
+</section>
+
+<section class="bottom-btn text-center">
+    <ul class="flex">
+        <li class="all-select">全选</li>
+        <li class="delete">删除</li>
+    </ul>
+</section>
+@section js{
+    <script src="@ViewBag.V4FileServer/js/mine/history.js"></script>
+}

@@ -1,0 +1,80 @@
+﻿@{ 
+    int currentPage = ViewBag.CurrentPage??1;
+    int pageCount = (int)(ViewBag.PageCount??1);
+    string listURL = ViewBag.ListURL??"";
+}
+<div class="pager">
+    @if (currentPage > 1)
+    {
+        <a id="page_first" href="@listURL.Replace("{{page}}", "1")">首页</a>
+        <a id="page_prev" href="@listURL.Replace("{{page}}", (currentPage - 1).ToString())">上一页</a>
+    }
+    else
+    {
+        <a id="page_first" class="disabled">首页</a>
+        <a id="page_prev" class="disabled">上一页</a>
+    }
+    <p id="pager">
+    @if (pageCount < 10)
+    {
+        for (int i = 1; i < pageCount + 1; i++)
+        {
+            <a href="@listURL.Replace("{{page}}",i.ToString())" class="@(i==currentPage?"selected":"")">@i</a>
+        }
+    }
+    else
+    {
+        if (currentPage <= 5)
+        {
+            for (int i = 1; i < currentPage + 3; i++)
+            {
+                <a href="@listURL.Replace("{{page}}",i.ToString())" class="@(i==currentPage?"selected":"")">@i</a>
+            }
+            <span>...</span>
+            for (var i = pageCount - 1; i <= pageCount ; i++)
+            {
+                <a href="@listURL.Replace("{{page}}",i.ToString())" class="@(i==currentPage?"selected":"")">@i</a>
+            }
+        }
+        else if (currentPage > pageCount - 5)
+        {
+            for (var i = 1; i < 3; i++)
+            {
+                <a href="@listURL.Replace("{{page}}",i.ToString())" class="@(i==currentPage?"selected":"")">@i</a>
+            }
+            <span>...</span>
+            for (var i = currentPage - 2; i <= pageCount ; i++)
+            {
+                <a href="@listURL.Replace("{{page}}",i.ToString())" class="@(i==currentPage?"selected":"")">@i</a>
+            }
+        }
+        else
+        {
+            for (var i = 1; i < 3; i++)
+            {
+                <a href="@listURL.Replace("{{page}}",i.ToString())" class="@(i==currentPage?"selected":"")">@i</a>
+            }
+            <span>...</span>
+            for (var i = currentPage - 2; i < currentPage + 3; i++)
+            {
+                <a href="@listURL.Replace("{{page}}",i.ToString())" class="@(i==currentPage?"selected":"")">@i</a>
+            }
+            <span>...</span>
+            for (var i = pageCount - 1; i <= pageCount ; i++)
+            {
+                <a href="@listURL.Replace("{{page}}",i.ToString())" class="@(i==currentPage?"selected":"")">@i</a>
+            }
+        }
+    }
+    </p>
+    @if (currentPage < pageCount)
+    {
+        <a id="page_next" href="@listURL.Replace("{{page}}", (currentPage + 1).ToString())">下一页</a>
+        <a id="page_last" href="@listURL.Replace("{{page}}", pageCount.ToString())">末页</a>
+    }
+    else
+    {
+        <a id="page_next" class="disabled">下一页</a>
+        <a id="page_last" class="disabled">末页</a>
+    }
+</div>

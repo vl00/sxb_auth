@@ -1,0 +1,394 @@
+.social {
+  color: #fff; 
+}
+.social.btn-sm {
+  padding: 0 10px 0 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border-radius: 0; 
+}
+.social.btn-lg {
+  border-radius: 0; 
+}
+.social.btn {
+  border-radius: 0; 
+}
+.social.facebook {
+  background: #3b5998; 
+}
+.social [class*="-facebook"]:hover:after,
+.social.facebook:hover {
+  background: #344e86; 
+}
+.social [class*="-facebook"] {
+  color: #2d4373; 
+}
+.social.twitter {
+  background: #00aced; 
+}
+.social [class*="-twitter"]:hover:after,
+.social.twitter:hover {
+  background: #0099d4; 
+}
+.social [class*="-twitter"] {
+  color: #0087ba; 
+}
+.social.linkedin {
+  background: #4875b4; 
+}
+.social [class*="-linkedin"]:hover:after,
+.social.linkedin:hover {
+  background: #4169a2; 
+}
+.social [class*="-linkedin"] {
+  color: #395d90; 
+}
+.social.flickr {
+  background: #ff0084; 
+}
+.social [class*="-flickr"]:hover:after,
+.social.flickr:hover {
+  background: #e60077; 
+}
+.social [class*="-flickr"] {
+  color: #cc006a; 
+}
+.social.tumblr {
+  background: #32506d; 
+}
+.social [class*="-tumblr"]:hover:after,
+.social.tumblr:hover {
+  background: #2a435c; 
+}
+.social [class*="-tumblr"] {
+  color: #22364a; 
+}
+.social.xing {
+  background: #026466; 
+}
+.social [class*="-xing"]:hover:after,
+.social.xing:hover {
+  background: #024b4d; 
+}
+.social [class*="-xing"] {
+  color: #013334; 
+}
+.social.github {
+  background: #4183c4; 
+}
+.social [class*="-github"]:hover:after,
+.social.github:hover {
+  background: #3876b4; 
+}
+.social [class*="-github"] {
+  color: #3269a0; 
+}
+.social.html5 {
+  background: #e34f26; 
+}
+.social [class*="-html5"]:hover:after,
+.social.html5:hover {
+  background: #d4431b; 
+}
+.social [class*="-html5"] {
+  color: #be3c18; 
+}
+.social.openid {
+  background: #f78c40; 
+}
+.social [class*="-openid"]:hover:after,
+.social.openid:hover {
+  background: #f67d28; 
+}
+.social [class*="-openid"] {
+  color: #f56f0f; 
+}
+.social.stack-overflow {
+  background: #fe7a15; 
+}
+.social [class*="-stack-overflow"]:hover:after,
+.social.stack-overflow:hover {
+  background: #f86c01; 
+}
+.social [class*="-stack-overflow"] {
+  color: #df6101; 
+}
+.social.css3 {
+  background: #0170ba; 
+}
+.social [class*="-css3"]:hover:after,
+.social.css3:hover {
+  background: #0161a1; 
+}
+.social [class*="-css3"] {
+  color: #015187; 
+}
+.social.youtube {
+  background: #b00; 
+}
+.social [class*="-youtube"]:hover:after,
+.social.youtube:hover {
+  background: #a20000; 
+}
+.social [class*="-youtube"] {
+  color: #880000; 
+}
+.social.dribbble {
+  background: #ea4c89; 
+}
+.social [class*="-dribbble"]:hover:after,
+.social.dribbble:hover {
+  background: #e7357a; 
+}
+.social [class*="-dribbble"] {
+  color: #e51e6b; 
+}
+.social.dropbox {
+  background: #007ee5; 
+}
+.social [class*="-dropbox"]:hover:after,
+.social.dropbox:hover {
+  background: #0070cc; 
+}
+.social [class*="-dropbox"] {
+  color: #0070cc; 
+}
+.social.google-plus {
+  background: #d34836; 
+}
+.social [class*="-google-plus"]:hover:after,
+.social.google-plus:hover {
+  background: #c43d2b; 
+}
+.social [class*="-google-plus"] {
+  color: #b03626; 
+}
+.social.instagram {
+  background: #517fa4; 
+}
+.social [class*="-instagram"]:hover:after,
+.social.instagram:hover {
+  background: #497293; 
+}
+.social [class*="-instagram"] {
+  color: #406582; 
+}
+.social.pinterest {
+  background: #cb2027; 
+}
+.social [class*="-pinterest"]:hover:after,
+.social.pinterest:hover {
+  background: #b51d23; 
+}
+.social [class*="-pinterest"] {
+  color: #9f191f; 
+}
+.social.vk {
+  background: #45668e; 
+}
+.social [class*="-vk"]:hover:after,
+.social.vk:hover {
+  background: #3d5a7d; 
+}
+.social [class*="-vk"] {
+  color: #344d6c; 
+}
+.social.yahoo {
+  background: #400191; 
+}
+.social [class*="-yahoo"]:hover:after,
+.social.yahoo:hover {
+  background: #350178; 
+}
+.social [class*="-yahoo"] {
+  color: #2a015e; 
+}
+.social.behance {
+  background: #1769ff; 
+}
+.social [class*="-behance"]:hover:after,
+.social.behance:hover {
+  background: #0059fd; 
+}
+.social [class*="-behance"] {
+  color: #0050e3; 
+}
+.social.reddit {
+  background: #ff4500; 
+}
+.social [class*="-reddit"]:hover:after,
+.social.reddit:hover {
+  background: #e63e00; 
+}
+.social [class*="-reddit"] {
+  color: #cc3700; 
+}
+.social.spotify {
+  background: #7ab800; 
+}
+.social [class*="-spotify"]:hover:after,
+.social.spotify:hover {
+  background: #699f00; 
+}
+.social [class*="-spotify"] {
+  color: #588500; 
+}
+.social.vine {
+  background: #00bf8f; 
+}
+.social [class*="-vine"]:hover:after,
+.social.vine:hover {
+  background: #00a67c; 
+}
+.social [class*="-vine"] {
+  color: #008c69; 
+}
+.social.foursquare {
+  background: #1073af; 
+}
+.social [class*="-foursquare"]:hover:after,
+.social.foursquare:hover {
+  background: #0e6498; 
+}
+.social [class*="-foursquare"] {
+  color: #0c5480; 
+}
+.social.vimeo {
+  background: #aad450; 
+}
+.social [class*="-vimeo"]:hover:after,
+.social.vimeo:hover {
+  background: #a0cf3c; 
+}
+.social [class*="-vimeo"] {
+  color: #93c130; 
+}
+
+
+
+/*common styles !!!YOU DON'T NEED THEM */
+
+.effect a:last-child {
+  margin-right: 0px;
+}
+
+/*common link styles !!!YOU NEED THEM*/
+
+.effect a {
+  text-decoration: none !important;
+  color: #fff;
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  border-radius: 10px;
+  margin-right: 10px;
+  font-size: 25px;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+}
+.effect a i {
+  position: relative;
+  z-index: 3;
+}
+.effect a.fb {
+  background-color: #3b5998;
+}
+.effect a.tw {
+  background-color: #00aced;
+}
+.effect a.g-plus {
+  background-color: #dd4b39;
+}
+.effect a.dribbble {
+  background-color: #ea4c89;
+}
+.effect a.pinterest {
+  background-color: #cb2027;
+}
+.effect a.insta {
+  background-color: #bc2a8d;
+}
+.effect a.in {
+  background-color: #007bb6;
+}
+.effect a.vimeo {
+  background-color: #1ab7ea;
+}
+
+/* aeneas effect */
+.effect.aeneas a {
+  transition: transform 0.4s linear 0s, border-top-left-radius 0.1s linear 0s, border-top-right-radius 0.1s linear 0.1s, border-bottom-right-radius 0.1s linear 0.2s, border-bottom-left-radius 0.1s linear 0.3s;
+}
+.effect.aeneas a i {
+  transition: transform 0.4s linear 0s;
+}
+.effect.aeneas a:hover {
+  transform: rotate(360deg);
+  border-radius: 50%;
+}
+.effect.aeneas a:hover i {
+  transform: rotate(-360deg);
+}
+
+/* jaques effect */
+.effect.jaques a {
+  transition: border-top-left-radius 0.1s linear 0s, border-top-right-radius 0.1s linear 0.1s, border-bottom-right-radius 0.1s linear 0.2s, border-bottom-left-radius 0.1s linear 0.3s;
+}
+.effect.jaques a:hover {
+  border-radius: 50%;
+}
+
+/* egeon effect */
+.effect.egeon a {
+  transition: transform 0.2s linear 0s, border-radius 0.2s linear 0.2s;
+}
+.effect.egeon a i {
+  transition: transform 0.2s linear 0s;
+}
+.effect.egeon a:hover {
+  transform: rotate(-90deg);
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+}
+.effect.egeon a:hover i {
+  transform: rotate(90deg);
+}
+
+/* claudio effect */
+.effect.claudio a {
+  transition: transform 0.2s linear 0s, border-radius 0.2s linear 0s;
+}
+.effect.claudio a:hover {
+  transform: scale(1.2);
+  border-bottom-left-radius: 50%;
+  border-top-right-radius: 50%;
+}
+
+/* laertes effect */
+.effect.laertes a {
+  transition: all 0.2s linear 0s;
+}
+.effect.laertes a i {
+  transition: all 0.2s linear 0s;
+}
+.effect.laertes a:hover {
+  border-radius: 50%/20%;
+}
+.effect.laertes a:hover i {
+  transform: scale(1.1);
+  text-shadow: 0 0 12px rgba(33, 33, 33, 0.6);
+}
+
+/* Jinae effect */
+.effect.jinae a {
+  transition: transform 0.2s linear 0s, border-radius 0.2s linear 0s;
+
+}
+.effect.jinae a:hover {
+  transform: scale(1.2);
+  border-top-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+}

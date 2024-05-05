@@ -1,0 +1,121 @@
+﻿@model iSchool.Sites.UserCenter.Models.ViewsModels.Home.Index
+@{
+    Layout = "~/Views/Shared/_MobileLayout.cshtml";
+    ViewData["Title"] = "Home Page";
+}
+@section  css{ 
+    <link rel="stylesheet" href="//file.sxkid.com/v4source/css/mine/mine.css" />
+}
+    <section class="head">
+        <div class="login-head">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a href="@Url.Action("Index","Info")" class="flex">
+                    <div style="position: relative;">
+                        <div class="img-box">
+                            <img src="@Model.headImgUrl" alt="">
+                        </div>
+                        <i class="icon"></i>
+                    </div>
+                    <div>
+                        <h5 class="user-name">@Model.nickname</h5>
+                        <span class="user-tag">@(string.IsNullOrEmpty(Model.title)?"未认证":Model.title)</span>
+                    </div>
+                    <i class="arrow"></i>
+                </a>
+            }
+            else
+            {
+                <a href="@Url.Action("Index","Login")" class="flex">
+                    <div class="img-box">
+                        <img src="//file.sxkid.com/v4source/imgs/mine/head.png" alt="">
+                    </div>
+                    <div>
+                        <h5 class="user-name">未登录</h5>
+                        <span class="login-or-register">登录/注册</span>
+                    </div>
+                    <i class="arrow"></i>
+                </a>
+            }
+        </div>
+        <ul class="login-msg text-center flex justify-content-between">
+            <li>
+                <a href="@Url.Action("Index","Publish")">
+                    <p class="num">@Model.count.publish</p>
+                    <span>发布</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index","Reply")">
+                    <p class="num">@Model.count.reply</p>
+                    <span>回复</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index","Collection")">
+                    <p class="num">@Model.count.follow</p>
+                    <span>关注</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index","Like")">
+                    <p class="num">@Model.count.like</p>
+                    <span>点赞</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <section>
+        <ul class="btn-list">
+            <li>
+                <a href="@Url.Action("Index","Message")">
+                    <i class="icon"></i>
+                    <span class="new-msg">我的消息</span>
+                    <i class="arrow"></i>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index","History")">
+                    <i class="icon"></i>
+                    <span>历史足迹</span>
+                    <i class="arrow"></i>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index","Setting")">
+                    <i class="icon"></i>
+                    <span>通用设置</span>
+                    <i class="arrow"></i>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index","Contact")">
+                    <i class="icon"></i>
+                    <span>联系客服</span>
+                    <i class="arrow"></i>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index","Agreement")">
+                    <i class="icon"></i>
+                    <span>协议及声明</span>
+                    <i class="arrow"></i>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index","Feedback")">
+                    <i class="icon"></i>
+                    <span>信息反馈</span>
+                    <i class="arrow"></i>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index","Cooperation")">
+                    <i class="icon"></i>
+                    <span>我要合作</span>
+                    <i class="arrow"></i>
+                </a>
+            </li>
+        </ul>
+    </section>

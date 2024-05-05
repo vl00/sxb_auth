@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_MobileLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.V4FileServer/css/mine/authentication.css" />
+}
+<header class="header flex justify-content-between">
+    <a href="/Account" class="arrow"></a>
+    <span class="header-title">身份认证</span>
+    <span class=""></span>
+</header>
+
+<section class="mt authentication">
+    <div class="img text-center">
+        <div class="text">
+            <h5>上学帮身份认证</h5>
+            <p>独有标识，彰显不同身份</p>
+        </div>
+    </div>
+    <ul class="select">
+        <li>
+            <a href="@Url.Action("Official")"><i class="icon"></i>校方用户<i class="arrow"></i></a>
+        </li>
+        <li>
+            <a href="@Url.Action("Senior")"><i class="icon"></i>升学达人<i class="arrow"></i></a>
+        </li>
+    </ul>
+</section>

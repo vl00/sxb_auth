@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_MobileLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.V4FileServer/css/mine/agreement.css" />
+}
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">联系客服</span>
+    <span class=""></span>
+</header>
+
+<h5 class="mt title">常见问题</h5>
+
+<section class="list">
+    <ul>
+        <li><a href="#">学校总评问题<i class="arrow"></i></a></li>
+        <li><a href="#">账户信息/登录问题<i class="arrow"></i></a></li>
+        <li><a href="#">身份认证问题<i class="arrow"></i></a></li>
+    </ul>
+</section>
+
+<div class="message">
+    <a href="@Url.Action("Form")" class="submit-btn text-center">没有找到相关问题？</a>
+</div>

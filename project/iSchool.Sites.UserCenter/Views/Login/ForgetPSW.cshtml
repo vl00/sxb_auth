@@ -1,0 +1,117 @@
+﻿
+@{
+    ViewData["Title"] = "ForgetPSW";
+    Layout = "~/Views/Shared/_MobileLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.V4FileServer/css/login/select-area.css" />
+    <link rel="stylesheet" href="@ViewBag.V4FileServer/css/mine/retrieve-password.css" />
+}
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">找回密码</span>
+    <span class=""></span>
+</header>
+
+<form id="form">
+    <section class="mt">
+        <div class="phone-num flex">
+            <a href="javascript:;" class="area-code" data-for="nationCode">
+                <span>+86 <i class="arrow"></i></span>
+                <input id="nationCode" type="hidden" name="nationCode" value="86" />
+            </a>
+            <input id="txtMobile" type="number" placeholder="请输入手机号">
+            <input id="mobile" type="hidden" name="mobile" />
+        </div>
+        <span class="phone-error">手机号错误</span>
+        <div class="next-btn text-center">
+            <a href="javascript:;">下一步</a>
+        </div>
+    </section>
+
+    <section class="part-2">
+        <div class="verification-code flex">
+            <input id="rnd" type="number" name="rnd" placeholder="请输入验证码">
+            <span class="get-code text-center">获取验证码</span>
+        </div>
+        <div class="password flex justify-content-between">
+            <input id="txtPassword" type="password" placeholder="请输入新密码（8～11位英文或数字）">
+            <input id="password" type="hidden" name="password" />
+        </div>
+        <div class="password flex justify-content-between">
+            <input id="txtRePassword" type="password" placeholder="请重新输入新密码">
+        </div>
+        <div class="submit-btn text-center">
+            <input type="hidden" name="kid" value="@ViewBag.Kid" />
+            <a id="submit">提交</a>
+        </div>
+    </section>
+
+    <div class="select-area"></div>
+</form>
+<div class="img-code text-center">
+    <span class="close"><i></i></span>
+    <h5>请输入图片验证码</h5>
+    <div class="flex code">
+        <div class="box"><img id="imgCode" src="@Url.Action("VerifyCode","Setting", new { r = new Random().Next() })" alt=""></div>
+        <span><i class="icon"></i></span>
+    </div>
+    <ul class="flex justify-content-between input-list">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+    <input id="verifyCode" type="tel" maxlength="4" />
+</div>
+<div class="curtain"></div>
+@section js{
+    <script src="@ViewBag.V4FileServer/js/mine/retrieve-password.js"></script>
+
+    <script type="text/javascript" src="@ViewBag.FileServer/js/plugin/rsa/System.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileServer/js/plugin/rsa/System.Text.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileServer/js/plugin/rsa/System.Security.Cryptography.RSA.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileServer/js/plugin/rsa/System.Convert.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileServer/js/plugin/rsa/System.Security.Cryptography.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileServer/js/plugin/rsa/System.BigInt.debug.js"></script>
+    <script type="text/javascript">
+        var publickey = '@Html.Raw(ViewBag.PublicKey)';
+        $('#txtPassword').val('');
+        //====================================================================================
+        function do_encrypt(plaintext) {
+            var decryptedBytes = System.Text.Encoding.UTF8.GetBytes(plaintext);
+            var doOaepPadding = false;
+            // ------------------------------------------------
+            // Encrypt
+            // ------------------------------------------------
+            var rsa = GetNewRsaProvider();
+            // Import the RSA Key information.
+            rsa.ImportParameters(GetRsaKey(false));
+            // Encrypt the passed byte array and specify OAEP padding.
+            var encryptedBytes = rsa.Encrypt(decryptedBytes, doOaepPadding);
+            var encryptedString = System.Convert.ToBase64String(encryptedBytes)
+            // ------------------------------------------------
+            // Display the encrypted data.
+            //var encryptedString = System.BitConverter.ToString(encryptedBytes, "");
+            return encryptedString;
+        }
+        function GetRsaKey(includePrivateParameters) {
+            var xmlParams = publickey;
+            // ------------------------------------------------
+            // RSA Keys
+            // ------------------------------------------------
+            var rsa = GetNewRsaProvider();
+            // Import parameters from xml.
+            rsa.FromXmlString(xmlParams);
+            // Export RSA key to RSAParameters and include:
+            //    false - Only public key required for encryption.
+            //    true  - Private key required for decryption.
+            return rsa.ExportParameters(includePrivateParameters);
+        }
+        function GetNewRsaProvider(dwKeySize) {
+            // Create a new instance of RSACryptoServiceProvider.
+            if (!dwKeySize) dwKeySize = 512;
+            return new System.Security.Cryptography.RSACryptoServiceProvider(dwKeySize);
+        }
+    </script>
+}

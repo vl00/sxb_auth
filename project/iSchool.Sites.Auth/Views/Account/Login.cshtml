@@ -1,0 +1,119 @@
+﻿
+@{
+    ViewData["Title"] = "Login";
+    Layout = "_Layout";
+    ViewBag.BodyClass = "bg-dark";
+}
+<div class="sufee-login d-flex align-content-center flex-wrap">
+    <div class="container">
+        <div class="login-content">
+            <div class="login-logo">
+                <a href="index.html">
+                    <img class="align-content" src="~/images/logo.png" alt="">
+                </a>
+            </div>
+            <div class="login-form">
+                <form method="post">
+                    <div class="form-group">
+                        <label>账号</label>
+                        <input id="txtAccount" type="text" class="form-control" placeholder="Account" />
+                    </div>
+                    <div class="form-group">
+                        <label>密码</label>
+                        <input id="txtPassword" type="password" class="form-control" placeholder="Password" />
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input id="remember" type="checkbox"> 记住我
+                        </label>
+                        <label class="pull-right">
+                            <a href="@Url.Action("ChangePSW","Account")">忘记密码</a>
+                        </label>
+                    </div>
+                    <input id="kid" type="hidden" name="kid" value="@ViewData["kid"]" />
+                    <input id="account" type="hidden" name="account" />
+                    <input id="password" type="hidden" name="password" />
+                    <input id="submit" type="submit" class="btn btn-success btn-flat m-b-30 m-t-30" value="登录" />
+                </form>
+                @if (!string.IsNullOrEmpty(ViewBag.ErrorDescription))
+                {
+                    <pre>@ViewBag.ErrorDescription</pre>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section js{
+    <script type="text/javascript" src="//file.sxkid.com/js/plugin/rsa/System.debug.js"></script>
+    <script type="text/javascript" src="//file.sxkid.com/js/plugin/rsa/System.Text.debug.js"></script>
+    <script type="text/javascript" src="//file.sxkid.com/js/plugin/rsa/System.Security.Cryptography.RSA.debug.js"></script>
+    <script type="text/javascript" src="//file.sxkid.com/js/plugin/rsa/System.Convert.debug.js"></script>
+    <script type="text/javascript" src="//file.sxkid.com/js/plugin/rsa/System.Security.Cryptography.debug.js"></script>
+    <script type="text/javascript" src="//file.sxkid.com/js/plugin/rsa/System.BigInt.debug.js"></script>
+    <script type="text/javascript">
+        var $ = jQuery;
+        var publickey = '@Html.Raw(ViewData["publicKey"])';
+        if (typeof localStorage != 'undefined') {
+            if (localStorage.getItem('account') != null && typeof localStorage.getItem('account') == 'string') {
+                $('#txtAccount').val(localStorage.getItem('account'));
+                $('#remember').prop('checked', 'checked');
+            }
+        }
+        $('#submit').click(function () {
+            if (typeof localStorage != 'undefined') {
+                if ($('#remember').is(':checked')) {
+                    localStorage.setItem('account', $('#txtAccount').val());
+                } else {
+                    localStorage.removeItem('account');
+                }
+            }
+            if ($('#txtAccount').val() != '' && $('#txtPassword').val() != '') {
+                $('#account').val(do_encrypt($('#txtAccount').val()));
+                $('#password').val(do_encrypt($('#txtPassword').val()));
+                return true;
+            } else {
+                alert('请输入用户名和密码');
+                return false;
+            }
+        });
+
+        //====================================================================================
+
+        function do_encrypt(plaintext) {
+            var decryptedBytes = System.Text.Encoding.UTF8.GetBytes(plaintext);
+            var doOaepPadding = false;
+            // ------------------------------------------------
+            // Encrypt
+            // ------------------------------------------------
+            var rsa = GetNewRsaProvider();
+            // Import the RSA Key information.
+            rsa.ImportParameters(GetRsaKey(false));
+            // Encrypt the passed byte array and specify OAEP padding.
+            var encryptedBytes = rsa.Encrypt(decryptedBytes, doOaepPadding);
+            var encryptedString = System.Convert.ToBase64String(encryptedBytes)
+            // ------------------------------------------------
+            // Display the encrypted data.
+            //var encryptedString = System.BitConverter.ToString(encryptedBytes, "");
+            return encryptedString;
+        }
+        function GetRsaKey(includePrivateParameters) {
+            var xmlParams = publickey;
+            // ------------------------------------------------
+            // RSA Keys
+            // ------------------------------------------------
+            var rsa = GetNewRsaProvider();
+            // Import parameters from xml.
+            rsa.FromXmlString(xmlParams);
+            // Export RSA key to RSAParameters and include:
+            //    false - Only public key required for encryption.
+            //    true  - Private key required for decryption.
+            return rsa.ExportParameters(includePrivateParameters);
+        }
+        function GetNewRsaProvider(dwKeySize) {
+            // Create a new instance of RSACryptoServiceProvider.
+            if (!dwKeySize) dwKeySize = 512;
+            return new System.Security.Cryptography.RSACryptoServiceProvider(dwKeySize);
+        }
+    </script>
+}

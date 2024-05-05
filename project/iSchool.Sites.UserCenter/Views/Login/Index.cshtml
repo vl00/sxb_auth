@@ -1,0 +1,162 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_MobileLayout.cshtml";
+}
+
+
+@section css{
+    <link rel="stylesheet" href="@ViewBag.V4FileServer/css/login/login.css" />
+    <link rel="stylesheet" href="@ViewBag.V4FileServer/css/login/select-area.css" />
+}
+<header class="header flex justify-content-between">
+    <i class="arrow"></i>
+    <span class="header-title">手机登录</span>
+    <span class=""></span>
+</header>
+
+<section style="padding-top: 55px;">
+    <ul class="login-mode flex justify-content-around">
+        <li class="active">验证码登录</li>
+        <li><i></i></li>
+        <li>密码登录</li>
+    </ul>
+</section>
+<form id="loginForm">
+    <section>
+        <div class="phone-num flex">
+            <a href="javascript:;" class="area-code" data-for="nationCode">
+                <span>+86 <i class="arrow"></i></span>
+                <input id="nationCode" type="hidden" name="nationCode" value="86" />
+            </a>
+            <input id="txtMobile" type="number" placeholder="请输入手机号">
+            <input type="hidden" id="mobile" name="mobile" />
+        </div>
+        <div>
+            <div class="verification-code flex">
+                <input id="txtRnd" name="rnd" type="text" maxlength="6" placeholder="请输入验证码" autocomplete="off">
+                <span id="getCode" class="get-code text-center">获取验证码</span>
+            </div>
+        </div>
+        <div style="display: none;">
+            <div class="password flex justify-content-between">
+                <input id="txtPassword" type="password" placeholder="请输入密码" autocomplete="new-password">
+                <input type="hidden" id="password" name="password" />
+                <i class="icon"></i>
+            </div>
+            <a href="@Url.Action("ForgetPSW")" class="forget-password">忘记密码？</a>
+        </div>
+    </section>
+
+    <section class="login-btn text-center">
+        <input type="hidden" name="kid" value="@ViewBag.Kid" />
+        <a id="submit" href="javascript:;">登录</a>
+    </section>
+</form>
+
+<section>
+    <ul class="other-login-list flex justify-content-around">
+        <li class="wechat"><a href="@ViewBag.Login_Uri_WX"><i class="icon"></i></a></li>
+        <li class="qq"><a href="@ViewBag.Login_Uri_QQ"><i class="icon"></i></a></li>
+        <li class="weibo"><i class="icon"></i></li>
+    </ul>
+    <p class="tips text-center">登录即代表您已阅读并同意<a href="javascript:;" class="clause">服务条款</a>、<a href="javascript:;" class="clause">隐私条款</a></p>
+</section>
+
+<section class="confirm-popup text-center">
+    <h5 class="confirm-title">“上学帮”想要打开<span>微信</span></h5>
+    <ul class="btn-list flex">
+        <li class="cancel">取消</li>
+        <li>打开</li>
+    </ul>
+</section>
+
+<div class="select-area"></div>
+<!-- 幕布 -->
+<div class="curtain"></div>
+
+@section js{
+    <script src="@ViewBag.V4FileServer/js/login/login.js"></script>
+
+    <script type="text/javascript" src="@ViewBag.FileServer/js/plugin/rsa/System.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileServer/js/plugin/rsa/System.Text.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileServer/js/plugin/rsa/System.Security.Cryptography.RSA.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileServer/js/plugin/rsa/System.Convert.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileServer/js/plugin/rsa/System.Security.Cryptography.debug.js"></script>
+    <script type="text/javascript" src="@ViewBag.FileServer/js/plugin/rsa/System.BigInt.debug.js"></script>
+    <script type="text/javascript">
+        var publickey = '@Html.Raw(ViewBag.PublicKey)';
+        $('#txtRnd').val('');
+        $('#txtPassword').val('');
+        $('#submit').click(function () {
+            var _this = $(this).parent();
+            if (_this.hasClass('can-login')) {
+                _this.removeClass('can-login');
+                if ($('#txtMobile').val() != '') {
+                    $('#mobile').val(do_encrypt($('#txtMobile').val()));
+                } else {
+                    _this.addClass('can-login');
+                    return;
+                }
+                if ($('#txtPassword').val() != '') {
+                    $('#password').val(do_encrypt($('#txtPassword').val()));
+                } else if ($('#txtRnd').val() == '') {
+                    _this.addClass('can-login');
+                    return;
+                }
+                $.ajax({
+                    type: 'post',
+                    data: $('#loginForm').serialize(),
+                    dataType: 'json',
+                    success: function (json) {
+                        if (json.status == 0) {
+                            location.href = json.redirect_uri || '/';
+                        } else {
+                            $.prompt(json.errorDescription);
+                        }
+                    },
+                    complete: function () {
+                        _this.addClass('can-login');
+                    }
+                });
+            }
+        });
+
+    //====================================================================================
+
+    function do_encrypt(plaintext) {
+        var decryptedBytes = System.Text.Encoding.UTF8.GetBytes(plaintext);
+        var doOaepPadding = false;
+        // ------------------------------------------------
+        // Encrypt
+        // ------------------------------------------------
+        var rsa = GetNewRsaProvider();
+        // Import the RSA Key information.
+        rsa.ImportParameters(GetRsaKey(false));
+        // Encrypt the passed byte array and specify OAEP padding.
+        var encryptedBytes = rsa.Encrypt(decryptedBytes, doOaepPadding);
+        var encryptedString = System.Convert.ToBase64String(encryptedBytes)
+        // ------------------------------------------------
+        // Display the encrypted data.
+        //var encryptedString = System.BitConverter.ToString(encryptedBytes, "");
+        return encryptedString;
+    }
+    function GetRsaKey(includePrivateParameters) {
+        var xmlParams = publickey;
+        // ------------------------------------------------
+        // RSA Keys
+        // ------------------------------------------------
+        var rsa = GetNewRsaProvider();
+        // Import parameters from xml.
+        rsa.FromXmlString(xmlParams);
+        // Export RSA key to RSAParameters and include:
+        //    false - Only public key required for encryption.
+        //    true  - Private key required for decryption.
+        return rsa.ExportParameters(includePrivateParameters);
+    }
+    function GetNewRsaProvider(dwKeySize) {
+        // Create a new instance of RSACryptoServiceProvider.
+        if (!dwKeySize) dwKeySize = 512;
+        return new System.Security.Cryptography.RSACryptoServiceProvider(dwKeySize);
+    }
+    </script>
+}

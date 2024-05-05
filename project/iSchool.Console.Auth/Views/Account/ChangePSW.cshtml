@@ -1,0 +1,117 @@
+﻿
+@{
+    ViewData["Title"] = "ChangePSW";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.BodyClass = "bg-dark";
+    iSchool.Authorization.Models.AdminInfo adminInfo = ViewData["adminInfo"] as iSchool.Authorization.Models.AdminInfo;
+    string account = string.Empty;
+    if (adminInfo != null)
+    {
+        account = adminInfo.Name;
+    }
+}
+
+<div class="sufee-login d-flex align-content-center flex-wrap">
+    <div class="container">
+        <div class="login-content">
+            <div class="login-logo">
+                <a href="index.html">
+                    <img class="align-content" src="~/images/logo.png" alt="">
+                </a>
+            </div>
+            <div class="login-form">
+                <form method="post">
+                    <div class="form-group">
+                        <label>账号</label>
+                        <input id="txtAccount" type="text" class="form-control" placeholder="Account" value="@account" />
+                    </div>
+                    <div class="form-group">
+                        <label>原密码</label>
+                        <input id="txtPassword" type="password" class="form-control" placeholder="Orign Password" />
+                    </div>
+                    <div class="form-group">
+                        <label>新密码</label>
+                        <input id="txtPassword_n" type="password" class="form-control" placeholder="New Password" />
+                    </div>
+                    <div class="form-group">
+                        <label>确认密码</label>
+                        <input id="txtPassword_r" type="password" class="form-control" placeholder="New Password Again" />
+                    </div>
+                    <input id="kid" type="hidden" name="kid" value="@ViewData["kid"]" />
+                    <input id="account" type="hidden" name="account" />
+                    <input id="password" type="hidden" name="password" />
+                    <input id="password_n" type="hidden" name="password_n" />
+                    <input id="submit" type="submit" class="btn btn-success btn-flat m-b-30 m-t-30" value="修改" />
+                </form>
+                @if (!string.IsNullOrEmpty(ViewBag.ErrorDescription))
+                {
+                    <pre>@ViewBag.ErrorDescription</pre>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@section js{
+    <script type="text/javascript" src="//file.sxkid.com/js/plugin/rsa/System.debug.js"></script>
+    <script type="text/javascript" src="//file.sxkid.com/js/plugin/rsa/System.Text.debug.js"></script>
+    <script type="text/javascript" src="//file.sxkid.com/js/plugin/rsa/System.Security.Cryptography.RSA.debug.js"></script>
+    <script type="text/javascript" src="//file.sxkid.com/js/plugin/rsa/System.Convert.debug.js"></script>
+    <script type="text/javascript" src="//file.sxkid.com/js/plugin/rsa/System.Security.Cryptography.debug.js"></script>
+    <script type="text/javascript" src="//file.sxkid.com/js/plugin/rsa/System.BigInt.debug.js"></script>
+    <script type="text/javascript">
+        var publickey = '@Html.Raw(ViewData["publicKey"])';
+        $('#submit').click(function () {
+            if ($('#txtAccount').val() != '' && $('#txtPassword').val() != '' && $('#txtPassword_n').val() != '' && $('#txtPassword_r').val() != '') {
+                if ($('#txtPassword_n').val() != $('#txtPassword_r').val()) {
+                    alert('两次输入的新密码不一样');
+                    return false;
+                }
+                $('#account').val(do_encrypt($('#txtAccount').val()));
+                $('#password').val(do_encrypt($('#txtPassword').val()));
+                $('#password_n').val(do_encrypt($('#txtPassword_n').val()));
+                return true;
+            } else {
+                alert('请输入完整填写表单');
+                return false;
+            }
+        });
+
+        //====================================================================================
+
+        function do_encrypt(plaintext) {
+            var decryptedBytes = System.Text.Encoding.UTF8.GetBytes(plaintext);
+            var doOaepPadding = false;
+            // ------------------------------------------------
+            // Encrypt
+            // ------------------------------------------------
+            var rsa = GetNewRsaProvider();
+            // Import the RSA Key information.
+            rsa.ImportParameters(GetRsaKey(false));
+            // Encrypt the passed byte array and specify OAEP padding.
+            var encryptedBytes = rsa.Encrypt(decryptedBytes, doOaepPadding);
+            var encryptedString = System.Convert.ToBase64String(encryptedBytes)
+            // ------------------------------------------------
+            // Display the encrypted data.
+            //var encryptedString = System.BitConverter.ToString(encryptedBytes, "");
+            return encryptedString;
+        }
+        function GetRsaKey(includePrivateParameters) {
+            var xmlParams = publickey;
+            // ------------------------------------------------
+            // RSA Keys
+            // ------------------------------------------------
+            var rsa = GetNewRsaProvider();
+            // Import parameters from xml.
+            rsa.FromXmlString(xmlParams);
+            // Export RSA key to RSAParameters and include:
+            //    false - Only public key required for encryption.
+            //    true  - Private key required for decryption.
+            return rsa.ExportParameters(includePrivateParameters);
+        }
+        function GetNewRsaProvider(dwKeySize) {
+            // Create a new instance of RSACryptoServiceProvider.
+            if (!dwKeySize) dwKeySize = 512;
+            return new System.Security.Cryptography.RSACryptoServiceProvider(dwKeySize);
+        }
+    </script>
+}

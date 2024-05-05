@@ -1,0 +1,162 @@
+﻿@model  iSchool.Sites.UserCenter.Models.ViewsModels.Info.Index
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_MobileLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.V4FileServer/css/mine/mine-msg.css" />
+    <style type="text/css">
+        .follow input {position:absolute; left:-9999px;} 
+    </style>
+}
+<header class="header flex justify-content-between">
+    <a href="/" class="arrow"></a>
+    <span class="header-title">个人信息</span>
+    <span class=""></span>
+</header>
+
+<section>
+    <ul class="msg-list">
+        <li>
+            <a id="headImgUploadHandler" class="flex justify-content-between">
+                <span>头像</span>
+                <div>
+                    <div class="img-box">
+                        <img id="headImg" src="@Model.UserInfo.HeadImgUrl" alt="@Model.UserInfo.Nickname">
+                    </div>
+                    <i class="arrow"></i>
+                </div>
+            </a>
+            <input type="file" id="headImgUpload" class="fileInput" />
+        </li>
+        <li>
+            <a id="updateNickname" class="flex justify-content-between">
+                <span>昵称</span>
+                <div>
+                    <span class="user-name" id="nickname">@Model.UserInfo.Nickname</span>
+                    <i class="arrow"></i>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="@Url.Action("BindMobile","Account")" class="flex justify-content-between">
+                <span>手机号</span>
+                <div>
+                    <span class="phone-num">@(!string.IsNullOrEmpty(Model.UserInfo.Mobile) ? Model.UserInfo.Mobile.Substring(0, 3) + "****" + Model.UserInfo.Mobile.Substring(7) : "未绑定")</span>
+                    <i class="arrow"></i>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="@Url.Action("Index","Verify")" class="flex justify-content-between">
+                <span>认证</span>
+                <div>
+                    <span class="authentication">升学达人</span>
+                    <i class="arrow"></i>
+                </div>
+            </a>
+        </li>
+    </ul>
+    <div class="follow">
+        <h5 class="title">关注学段</h5>
+        <form id="interestForm">
+            <ul class="flex text-center">
+                <li><label><input type="checkbox" name="type_1" @(Model.Interest.Type_1?"checked":"") />幼儿园</label></li>
+                <li><label><input type="checkbox" name="type_2" @(Model.Interest.Type_2?"checked":"") />小学</label></li>
+                <li><label><input type="checkbox" name="type_3" @(Model.Interest.Type_3?"checked":"") />初中</label></li>
+                <li><label><input type="checkbox" name="type_4" @(Model.Interest.Type_4?"checked":"") />高中</label></li>
+            </ul>
+            <h5 class="title">关注学校类型</h5>
+            <ul class="flex text-center">
+                <li><label><input type="checkbox" name="nature_3" @(Model.Interest.Nature_3?"checked":"") />国际</label></li>
+                <li><label><input type="checkbox" name="nature_2" @(Model.Interest.Nature_2?"checked":"") />民办</label></li>
+                <li><label><input type="checkbox" name="nature_1" @(Model.Interest.Nature_1?"checked":"") />公办</label></li>
+            </ul>
+            <h5 class="title">关注学校住宿制度</h5>
+            <ul class="flex text-center">
+                <li><label><input type="checkbox" name="lodging_0" @(Model.Interest.Lodging_0?"checked":"") />走读</label></li>
+                <li><label><input type="checkbox" name="lodging_1" @(Model.Interest.Lodging_1?"checked":"") />寄宿</label></li>
+            </ul>
+        </form>
+    </div>
+</section>
+@section js{ 
+<script type="text/javascript">
+    $('#headImgUploadHandler').click(function(){
+        $('#headImgUpload').click();
+    });
+    var allowExt = ['jpg','png','gif','jpeg'];
+    $('#headImgUpload').change(function () {
+        var ext = getExtension($(this).get(0).value.toLowerCase());
+        if (allowExt.indexOf(ext)==-1) {
+            alert('请选择图片格式的文件，谢谢');
+            return;
+        }
+        $.loading('上传中')
+        var data = new FormData();
+        data.append('upfile', $(this).get(0).files[0]);
+        $.ajax({
+            url: '@Url.Action("UploadHeadImg")',
+            type:'post',
+            processData: false,
+            contentType: false,
+            data: data,
+            dataType: 'json',
+            success: function (json) {
+                if (json.status == 0) {
+                    $('#headImg').attr('src', json.cdnUrl);
+                    $.prompt("上传成功");
+                } else {
+                    $.prompt(json.errorDescription);
+                }
+            },
+            complete: function () {
+                $.loading('remove');
+            }
+        })
+    });
+    $('#updateNickname').click(function () {
+        var newNickname = prompt('请输入新的昵称');
+        if ($.trim(newNickname) == '') {
+            return;
+        }
+        $.ajax({
+            url: '@Url.Action("UpdateNickname")',
+            type: 'post',
+            data: { nickname: newNickname },
+            dataType: 'json',
+            success: function (json) {
+                if (json.status == 0) {
+                    $('#nickname').text(newNickname);
+                    $.prompt("修改成功");
+                } else {
+                    $.prompt(json.errorDescription);
+                }
+            }
+        })
+    });
+    function getExtension(fileFullName) {
+        var pathSplitArr = fileFullName.split('.');
+        return pathSplitArr[pathSplitArr.length - 1];
+    }
+    var interestInit = false;
+    $('#interestForm input:checkbox').change(function () {
+        var li = $(this).parents('li').first();
+        li.toggleClass('active', $(this).is(':checked'));
+        if (interestInit) {
+            $.ajax({
+                url: '@Url.Action("SetUserInterest")',
+                type:'post',
+                data: $('#interestForm').serialize().replace(/\=on/g,'=true'),
+                dataType: 'json',
+                success: function (json) {
+                    if (json.status) {
+                        $.prompt(json.errorDescription);
+                    }
+                }
+            });
+        }
+    }).change();
+    interestInit = true;
+</script>
+}

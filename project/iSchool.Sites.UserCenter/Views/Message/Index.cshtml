@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_MobileLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="@ViewBag.V4FileServer/css/mine/mine-news.css" />
+}
+<header class="header flex justify-content-between">
+    <a class="arrow"></a>
+    <span class="header-title">我的消息</span>
+    <span class="btn">编辑</span>
+</header>
+
+<section>
+    <nav class="tab flex justify-content-between text-center">
+        <li class="active">私信<i class="new-msg"></i></li>
+        <li>关注<i></i></li>
+        <li>系统<i></i></li>
+    </nav>
+</section>
+
+<section>
+    <div class="content"></div>
+</section>
+
+<section class="bottom-btn text-center">
+    <ul class="flex">
+        <li class="all-select">全选</li>
+        <li class="delete">删除</li>
+    </ul>
+</section>
+@section js{
+    <script src="@ViewBag.V4FileServer/js/mine/mine-news.js"></script>
+}

@@ -1,0 +1,239 @@
+﻿@model iSchool.Authorization.Models.Character
+@{
+    ViewData["Title"] = "角色配置";
+    List<iSchool.Authorization.Models.Function> functions = ViewBag.FunctionList as List<iSchool.Authorization.Models.Function>;
+}
+@section css{ 
+<style type="text/css">
+    .query-list .checkbox {display:inline;}
+    .query-list label { font-size:12px; color:#ccc; }
+    .query-list label.checked { color:#0094ff;}
+    .query-list input {display:none;}
+    .query-list .form-check {padding:0;}
+</style>
+}
+<div class="card">
+    <div class="card-header">
+        <ul class="nav nav-pills m-0">
+            <li class="nav-item">
+                <a class="nav-link btn_step1 btn_s1 active" href="#nav-s1" data-toggle="tab">基础信息</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link btn_step2 btn_s2" href="#nav-s2" data-toggle="tab">准入系统</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link btn_step3 btn_s3" href="#nav-s3" data-toggle="tab">权限设置</a>
+            </li>
+        </ul>
+    </div>
+    <form id="form">
+        <div class="card-body tab-content pl-3 pt-2" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-s1">
+                <div class="form-group col-6 pt-5">
+                    <label class=" form-control-label">角色名称</label>
+                    <input id="txtName" name="name" class="form-control" type="text" placeholder="请输角色名称" value="@Model.Name">
+                </div>
+                <div class="form-group col-6 pb-5">
+                    <label class=" form-control-label">角色描述</label>
+                    <input id="txtName" name="description" class="form-control" type="text" placeholder="请输角色描述" value="@Model.Description">
+                    <input type="button" class="btn btn-primary mt-5 btn_step2" value="下一页" />
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav-s2">
+                <div class="form-group col-6 py-5">
+                    <label class=" form-control-label">请选择准入系统</label>
+                    <div class="form-check" id="platformSelect">
+                        @{
+                            List<byte> platformIDs = new List<byte>();
+                            foreach (var function in functions)
+                            {
+                                if (platformIDs.Contains(function.PlatformId)) { continue; }
+                                platformIDs.Add(function.PlatformId);
+                                <div class="checkbox">
+                                    <label class="form-check-label " for="platform_@function.PlatformId">
+                                        <input name="platformSelect" class="form-check-input" id="platform_@function.PlatformId" type="radio" value="@function.PlatformId" @(Model.Function.Any(a => a.PlatformId.Equals(function.PlatformId)) ? "checked" : "")>@function.Platform.Name
+                                    </label>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <input type="button" class="btn btn-secondary mt-5 mr-2 btn_step1" value="上一页" />
+                    <input type="button" class="btn btn-primary mt-5 btn_step3" value="下一页" />
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav-s3">
+                <div class="form-group py-5">
+                    <div class="form-check" id="functionSelect">
+                        @{
+                            platformIDs.Clear();
+                            foreach (var function in functions)
+                            {
+                                if (!platformIDs.Contains(function.PlatformId))
+                                {
+                                    platformIDs.Add(function.PlatformId);
+                                    <div class="card card_@function.PlatformId">
+                                        <div class="card-header">
+                                            @function.Platform.Name
+                                        </div>
+                                        <div class="card-body">
+                                            <div class=" row mx-3">
+                                                @foreach (var _function in functions.FindAll(a => a.PlatformId == function.PlatformId))
+                                                {
+                                                    <div class="col-md-4 pb-3">
+                                                        <label class="form-check-label" for="function_@_function.Id">
+                                                            <input name="function" class="form-check-input functionCheck" id="function_@_function.Id" type="checkbox" value="@_function.Id" @(Model.Function.Any(a => a.Id.Equals(_function.Id)) ? "checked" : "")>@_function.Name
+                                                        </label>
+                                                        @if (_function.Query.Count > 0)
+                                                        {
+                                                            <div class="query-list">
+                                                                <div class="form-check">
+                                                                    @foreach (var query in _function.Query)
+                                                                    {
+                                                                        bool isChecked = Model.Function.Any(a => a.Query.Any(b => b.Id.Equals(query.Id)));
+                                                                        <div class="checkbox">
+                                                                            <label class="form-check-label @(isChecked?"checked":"")">
+                                                                                <input name="query" class="form-check-input queryCheck" type="checkbox" value="@query.Id" @(isChecked ? "checked" : "") disabled="disabled">@query.Name
+                                                                            </label>
+                                                                        </div>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        }
+                    </div>
+                    <input type="button" class="btn btn-secondary mt-5 btn_step2" value="上一页" />
+                    <input type="button" class="btn btn-primary mt-5" id="submit" value="提交" />
+                    <input type="hidden" name="id" value="@ViewBag.ID" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<button id="modalSwitch" data-toggle="modal" data-target="#queryModal" style="position:fixed; left:0; top:0; border:none; width:0; height:0;"></button>
+<div tabindex="-1" class="modal fade" id="queryModal" role="dialog" aria-hidden="true" aria-labelledby="mediumModalLabel" style="display: none;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">模块选择</h5>
+                <button id="modal-close" class="close" aria-label="Close" type="button" data-dismiss="modal">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div id="modal-body" class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-secondary" data-dismiss="modal" value="取消" />
+                <input id="btnQuerySet" class="btn btn-primary" type="button" value="确定" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@section js{
+    <script type="text/javascript">
+        if ($.trim($('#txtName').val()) == '') {
+            $('.btn_step2').addClass('disabled');
+        } else {
+            $('.page-title h1').text("角色配置 - " + $.trim($('#txtName').val()));
+        }
+        if ($('#platformSelect input:radio:checked').length == 0) {
+            $('.btn_step3').addClass('disabled');
+        }
+
+        $('#txtName').on('input',function () {
+            if ($.trim($('#txtName').val()) == '') {
+                $('.btn_step2').addClass('disabled');
+                $('.btn_step3').addClass('disabled');
+                $('.page-title h1').text("角色配置");
+            } else {
+                $('.btn_step2').removeClass('disabled');
+                $('.page-title h1').text("角色配置 - " + $(this).val());
+                if ($('#platformSelect input:radio:checked').length == 0) {
+                    $('.btn_step3').addClass('disabled');
+                } else {
+                    $('.btn_step3').removeClass('disabled');
+                }
+            }
+        });
+        $('#platformSelect input:radio').change(function () {
+            if ($(this).is(':checked')) {
+                $('#functionSelect').children('.card_' + $(this).val()).show().siblings().hide()
+                    .find('label').removeClass('checked').find('input:checkbox').prop('checked', false);
+            }
+            if ($('#platformSelect input:radio:checked').length == 0) {
+                $('.btn_step3').addClass('disabled');
+            } else {
+                $('.btn_step3').removeClass('disabled');
+            }
+        }).change();
+        $('#nav-tabContent .btn_step1').click(function () {
+            $('.btn_s1').click();
+        });
+        $('#nav-tabContent .btn_step2').click(function () {
+            $('.btn_s2').click();
+        });
+        $('#nav-tabContent .btn_step3').click(function () {
+            $('.btn_s3').click();
+        });
+        $('#submit').click(function () {
+            $('.query-list input:checkbox').removeAttr('disabled');
+            $.ajax({
+                url: '@Url.Action("UpdateCharacter","Admin")',
+                type: 'post',
+                data: $('#form').serialize(),
+                dataType: 'json',
+                success: function (json) {
+                    if (json.status == 0) {
+                        location.href = '@Url.Action("CharacterList","Admin")';
+                    } else {
+                        alert(json.errorDescription);
+                    }
+                }
+            });
+        });
+        var currentQuery = null;
+        $('.functionCheck').change(function () {
+            var next = $(this).parent().next();
+            currentQuery = next;
+            if (next.is('div')) {
+                if ($(this).is(':checked')) {
+                    $('#modalSwitch').click();
+                    $('#modal-body').empty().append(next.children().clone());
+                    $('#modal-body').find('input:checkbox').removeAttr('disabled');
+                } else {
+                    next.find('input:checkbox').prop('checked', false);
+                    next.find('label').removeClass('checked');
+                }
+            }
+        });
+        $('#modal-body').delegate('input:checkbox', 'change', function () {
+            if ($(this).is(':checked')) {
+                $(this).parent().addClass('checked');
+            } else {
+                $(this).parent().removeClass('checked');
+            }
+        });
+        $('.query-list').click(function () {
+            var _this = $(this);
+            currentQuery = _this;
+            $('#modalSwitch').click();
+            $('#modal-body').empty().append($(this).children().clone());
+            $('#modal-body').find('input:checkbox').removeAttr('disabled');
+        });
+        $('#btnQuerySet').on('click', function () {
+            $('#modal-body').find('input:checkbox').attr('disabled', 'disabled');
+            currentQuery.empty().append($('#modal-body').children());
+            if (currentQuery.find('input:checkbox:checked').length > 0) {
+                currentQuery.prev().find('input:checkbox').prop('checked', 'checked');
+            }
+            $('#modal-close').click();
+        });
+    </script>
+}

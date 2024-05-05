@@ -1,0 +1,60 @@
+﻿@model iSchool.Sites.UserCenter.Models.Vo.CommentVo.CommentModel
+@{
+    Layout = null;
+}
+<ul class="comment-list">
+    @*关注的主贴*@
+    <li>
+        <a href="https://comment.sxkid.com/SchoolComment/CommentDetail?CommentId=@Model.Id">
+            <div class="flex justify-content-between">
+                <div class="user-msg flex">
+                    <div class="img-box"><img src="@Model.UserInfoModel.HeadImager" alt="" /></div>
+                    <div>
+                        <h5 class="user-name">@Model.UserInfoModel.NickName</h5>
+                        <span class="time-ago">@Model.AddTime</span>
+                    </div>
+                </div>
+            </div>
+            <p class="reply-content">@Model.Content</p>
+            <span class="img-num">共(@Model.CommentImagerCount)张图&gt;</span>
+            <div><span class="department">@Model.SchoolModel.SchoolName</span></div>
+            <div class="other-msg flex justify-content-between">
+                <span>@Model.AddTime</span>
+                <div class="flex">
+                    <div class="comment-num"><i class="comment-icon"></i>@Model.ReplyCount</div>
+                    <div class="like-num"><i class="comment-icon"></i>@Model.LikeCount</div>
+                </div>
+            </div>
+        </a>
+    </li>
+    @*关注的回复*@
+    <li>
+        <a href="https://comment.sxkid.com/SchoolComment/CommentDetail?CommentId=@Model.Id">
+            <div class="flex justify-content-between">
+                <div class="user-msg flex">
+                    <div class="img-box"><img src="@Model.CommentReplyModel.UserInfoModel.HeadImager" alt="" /></div>
+                    <div>
+                        <h5 class="user-name">@Model.CommentReplyModel.UserInfoModel.NickName</h5>
+                        <span class="time-ago">@Model.CommentReplyModel.CreateTime</span>
+                    </div>
+                </div>
+                <div class="like-num">
+                    <i class="comment-icon"></i>
+                    <span>@Model.CommentReplyModel.LikeCount</span>
+                </div>
+            </div>
+            <p class="reply-content"><span class="reply-target">回复<i>@Model.UserInfoModel.NickName：</i></span>@Model.CommentReplyModel.Content</p>
+            <div class="target">
+                <p>@Model.Content</p>
+                <div><span class="department">@Model.SchoolModel.SchoolName</span></div>
+                <div class="other-msg flex justify-content-between">
+                    <span>@Model.AddTime</span>
+                    <div class="flex">
+                        <div class="comment-num"><i class="comment-icon"></i>@Model.ReplyCount</div>
+                        <div class="like-num"><i class="comment-icon"></i>@Model.LikeCount</div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </li>
+</ul>
